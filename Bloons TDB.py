@@ -22,5 +22,5 @@ while running:
     pygame.draw.rect(screen,(255,0,0),start)
     pygame.draw.rect(screen,(255,0,0),end)     
     pygame.display.update()
-
+print("nananananananlmaofag")
 pygame.quit()
