@@ -14,6 +14,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    
-    
-pygame.quit()
+    keys = pygame.key.get_pressed()
+
+    if keys[pygame.K_w]:
+        pygame.quit()
