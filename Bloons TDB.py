@@ -9,9 +9,9 @@ screen.fill((255, 255, 255))
 start=pygame.Rect(0,0,50,50)
 end=pygame.Rect(0,0,50,50)
 start.center=(25,100)
-end.center=(550,575)
+end.center=(625,575)
 
-shop=pygame.Rect(600,0,400,600)
+shop=pygame.Rect(700,0,400,600)
 
 pygame.display.update()
 
