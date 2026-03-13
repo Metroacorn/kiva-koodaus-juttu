@@ -21,6 +21,13 @@ def dart_monkeyplace():
     dartx,darty = pygame.mouse.get_pos()
     
     
+    pygame.draw.circle(screen,(211,211,211),(dartx,darty),dartrange)
+    
+    
+    for i in dart_monkeys:
+        pygame.draw.circle(screen,i[2],i[1],i[0])
+    
+    
     
     pygame.draw.circle(screen,(0,0,0),(dartx,darty),25)
     
@@ -30,17 +37,31 @@ def dart_monkeyplace():
     pygame.draw.rect(screen,(255,0,0),dart_monkeyhit)
 
 def dart_monkeyplaced():
-    pygame.draw.circle(screen,(0,0,0), (dartstayx,dartstayy),25)
-    dart_monkeyhit=pygame.Rect(0,0,45,45)
-    dart_monkeyhit.center=(dartstayx,dartstayy)
+    dartshoot=[dartrange,(dartstayx,dartstayy),(211,211,211)]
+    
+    dart_monkeyshootbox.append(dartshoot)
+    
+    d=[25,(dartstayx,dartstayy),(0,0,0)]
+    
+    dart_monkeys.append(d)
+    for i in range(len(dart_monkeys)):
+        dart_monkeyhit=pygame.Rect(0,0,45,45)
+        dart_monkeyhit.center=(dartstayx,dartstayy)
+        dart_monkeyshit.append(dart_monkeyhit)
+    for i in dart_monkeys:
+        pygame.draw.circle(screen,i[2],i[1],i[0])
+        
+    
+    
     
     pygame.draw.rect(screen,(255,0,0),dart_monkeyhit)
 
     
-dart_monkeysamount=1
+
     
-dart_monkeys=[[]*dart_monkeysamount]
-dart_monkeyshootbox=[[]*dart_monkeysamount]  
+dart_monkeys=[]
+dart_monkeyshit=[]
+dart_monkeyshootbox=[]  
 
 dart_monkeyhit=pygame.Rect(0,0,25,25)
 
@@ -63,6 +84,9 @@ end.center=(625,575)
 shop=pygame.Rect(700,0,300,600)
 
 pygame.display.update()
+
+dartrange=125
+
 dartplaced=False
 dart_monkeybought=False
 running = True
