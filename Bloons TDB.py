@@ -34,7 +34,8 @@ def dart_monkeyplace():
     dart_monkeyhit=pygame.Rect(0,0,45,45)
     dart_monkeyhit.center=(dartx,darty)
     
-    pygame.draw.rect(screen,(255,0,0),dart_monkeyhit)
+    for i in dart_monkeyshit:
+        pygame.draw.rect(screen,(255,0,0),i)
 
 def dart_monkeyplaced():
     dartshoot=[dartrange,(dartstayx,dartstayy),(211,211,211)]
@@ -50,18 +51,150 @@ def dart_monkeyplaced():
         dart_monkeyshit.append(dart_monkeyhit)
     for i in dart_monkeys:
         pygame.draw.circle(screen,i[2],i[1],i[0])
+    
+    for i in dart_monkeyshit:
+        pygame.draw.rect(screen,(255,0,0),i)
         
     
     
     
     pygame.draw.rect(screen,(255,0,0),dart_monkeyhit)
 
+def boomerang_monkeyplace():
+    screen.fill((255,255,255))
+    background()
+    boomx, boomy= pygame.mouse.get_pos()
     
+    pygame.draw.circle(screen,(211,211,211),(boomx,boomy),boomrange)
+    
+    for i in boomerang_monkeys:
+        pygame.draw.circle(screen,i[2],i[1],i[0])
+    
+    pygame.draw.circle(screen,(0,0,0),(boomx,boomy),25)
+    
+    boomhit=pygame.Rect(0,0,45,45)
+    boomhit.center=(boomx,boomy)
+    
+    pygame.draw.rect(screen,(255,0,0),boomhit)
+    
+
+    
+    for i in boomerang_monkeyhit:
+        pygame.draw.rect(screen,(255,0,0),i)
+    
+
+def boomerang_monkeyplaced():
+    boomshoot=[boomrange,(boomstayx,boomstayy),(211,211,211)]
+    
+    boomerang_monkeyshootbox.append(boomshoot)
+    
+    d=[25,(boomstayx,boomstayy),(0,0,0)]
+    
+    boomerang_monkeys.append(d)
+    for i in range(len(boomerang_monkeys)):
+        boomerang_monkeyshit=pygame.Rect(0,0,45,45)
+        boomerang_monkeyshit.center=(boomstayx,boomstayy)
+        boomerang_monkeyhit.append(boomerang_monkeyshit)
+    
+    for i in boomerang_monkeys:
+        pygame.draw.circle(screen,i[2],i[1],i[0])
+    
+    for i in boomerang_monkeyhit:
+        pygame.draw.rect(screen,(255,0,0),i)
+
+def tack_shooterplace():
+    screen.fill((255,255,255))
+    background()
+    
+    tackx,tacky = pygame.mouse.get_pos()
+    
+    
+    pygame.draw.circle(screen,(211,211,211),(tackx,tacky),tackrange)
+    
+    
+    for i in tack_shooters:
+        pygame.draw.circle(screen,i[2],i[1],i[0])
+    
+    
+    
+    pygame.draw.circle(screen,(0,0,0),(tackx,tacky),25)
+    
+    tack_shooterhit=pygame.Rect(0,0,45,45)
+    tack_shooterhit.center=(tackx,tacky)
+    
+    for i in tack_shootershit:
+        pygame.draw.rect(screen,(255,0,0),i)
+
+def tack_shooterplaced():
+    tackshoot=[tackrange,(tackstayx,tackstayy),(211,211,211)]
+    
+    tack_shootershootbox.append(tackshoot)
+    
+    d=[25,(tackstayx,tackstayy),(0,0,0)]
+    
+    tack_shooters.append(d)
+    for i in range(len(tack_shooters)):
+        tack_shooterhit=pygame.Rect(0,0,45,45)
+        tack_shooterhit.center=(tackstayx,tackstayy)
+        tack_shootershit.append(tack_shooterhit)
+    for i in tack_shooters:
+        pygame.draw.circle(screen,i[2],i[1],i[0])
+    
+    for i in tack_shootershit:
+        pygame.draw.rect(screen,(255,0,0),i)
+        
+    
+    
+    
+    pygame.draw.rect(screen,(255,0,0),tack_shooterhit)
+
+def draw_monkeys():
+    #dartmonkey
+    for i in range(len(dart_monkeys)):
+        dart_monkeyhit=pygame.Rect(0,0,45,45)
+        dart_monkeyhit.center=(dartstayx,dartstayy)
+        dart_monkeyshit.append(dart_monkeyhit)
+    for i in dart_monkeys:
+        pygame.draw.circle(screen,i[2],i[1],i[0])
+    
+    for i in dart_monkeyshit:
+        pygame.draw.rect(screen,(255,0,0),i)
+    
+    #boomerangmonkey
+    for i in range(len(boomerang_monkeys)):
+        boomerang_monkeyshit=pygame.Rect(0,0,45,45)
+        boomerang_monkeyshit.center=(boomstayx,boomstayy)
+        boomerang_monkeyhit.append(boomerang_monkeyshit)
+    
+    for i in boomerang_monkeys:
+        pygame.draw.circle(screen,i[2],i[1],i[0])
+    
+    for i in boomerang_monkeyhit:
+        pygame.draw.rect(screen,(255,0,0),i)
+    
+    #tackshooter
+    for i in range(len(tack_shooters)):
+        tack_shooterhit=pygame.Rect(0,0,45,45)
+        tack_shooterhit.center=(tackstayx,tackstayy)
+        tack_shootershit.append(tack_shooterhit)
+    for i in tack_shooters:
+        pygame.draw.circle(screen,i[2],i[1],i[0])
+    
+    for i in tack_shootershit:
+        pygame.draw.rect(screen,(255,0,0),i)
 
     
 dart_monkeys=[]
 dart_monkeyshit=[]
 dart_monkeyshootbox=[]  
+
+boomerang_monkeys=[]
+boomerang_monkeyhit=[]
+boomerang_monkeyshootbox=[]
+
+tack_shooters=[]
+tack_shootershit=[]
+tack_shootershootbox=[]
 
 dart_monkeyhit=pygame.Rect(0,0,25,25)
 
@@ -86,7 +219,13 @@ shop=pygame.Rect(700,0,300,600)
 pygame.display.update()
 
 dartrange=125
+boomrange=150
+tackrange=75
 
+tack_shooterbought=False
+tackplaced=False
+boomerang_monkeybought=False
+boomplaced=False
 dartplaced=False
 dart_monkeybought=False
 running = True
@@ -103,6 +242,23 @@ while running:
             dartstayx, dartstayy=pygame.mouse.get_pos()
             dartplaced=True
         
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if boomerang_monkeyshop.collidepoint(event.pos):
+                boomerang_monkeybought=True
+        if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and boomerang_monkeybought:
+            boomerang_monkeybought=False
+            boomstayx, boomstayy=pygame.mouse.get_pos()
+            boomplaced=True
+        
+        
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if tack_shootershop.collidepoint(event.pos):
+                tack_shooterbought=True
+        if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and tack_shooterbought:
+            tack_shooterbought=False
+            tackstayx, tackstayy=pygame.mouse.get_pos()
+            tackplaced=True
+        
             
     mousex, mousey=pygame.mouse.get_pos()
     
@@ -114,7 +270,21 @@ while running:
         dart_monkeyplaced()
         dartplaced=False
         
-            
+    if boomerang_monkeybought:
+        if playarea.collidepoint(mousex,mousey):
+            boomerang_monkeyplace()
+    if boomplaced:
+        boomerang_monkeyplaced()
+        boomplaced=False
+    
+    if tack_shooterbought:
+        if playarea.collidepoint(mousex,mousey):
+            tack_shooterplace()
+    if tackplaced:
+        tack_shooterplaced()
+        tackplaced=False
+        
+    draw_monkeys()       
     background()
     pygame.display.update()
 
