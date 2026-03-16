@@ -13,6 +13,9 @@ def background():
     pygame.draw.rect(screen,(0,255,0),dart_monkeyshop)
     pygame.draw.rect(screen,(0,255,0),tack_shootershop)
     pygame.draw.rect(screen,(0,255,0),boomerang_monkeyshop)
+    pygame.draw.rect(screen,(0,255,0),banana_farmshop)
+    pygame.draw.rect(screen,(0,255,0),sniper_monkeyshop)
+    
 
 def dart_monkeyplace():
     screen.fill((255,255,255))
@@ -144,9 +147,73 @@ def tack_shooterplaced():
         pygame.draw.rect(screen,(255,0,0),i)
         
     
+def sniper_monkeyplace():
+   screen.fill((255,255,255))
+   background()
+    
+   snipex,snipey = pygame.mouse.get_pos()
     
     
-    pygame.draw.rect(screen,(255,0,0),tack_shooterhit)
+   pygame.draw.circle(screen,(211,211,211),(snipex,snipey),sniperange)
+    
+    
+   for i in sniper_monkeys:
+       pygame.draw.circle(screen,i[2],i[1],i[0])
+    
+    
+    
+   pygame.draw.circle(screen,(0,0,0),(snipex,snipey),25)
+    
+   sniper_monkeyhit=pygame.Rect(0,0,45,45)
+   sniper_monkeyhit.center=(snipex,snipey)
+    
+   for i in sniper_monkeyshit:
+       pygame.draw.rect(screen,(255,0,0),i)
+
+def sniper_monkeyplaced():
+    
+    snipeshoot=[sniperange,(snipestayx,snipestayy),(211,211,211)]
+    
+    sniper_monkeyshootbox.append(snipeshoot)
+    
+    d=[25,(snipestayx,snipestayy),(0,0,0)]
+    
+    sniper_monkeys.append(d)
+    for i in range(len(sniper_monkeys)):
+        sniper_monkeyhit=pygame.Rect(0,0,45,45)
+        sniper_monkeyhit.center=(snipestayx,snipestayy)
+        sniper_monkeyshit.append(sniper_monkeyhit)
+    for i in sniper_monkeys:
+        pygame.draw.circle(screen,i[2],i[1],i[0])
+    
+    for i in sniper_monkeyshit:
+        pygame.draw.rect(screen,(255,0,0),i)   
+   
+    pygame.draw.rect(screen,(255,0,0),sniper_monkeyhit) 
+
+def banana_farmplace():
+    screen.fill((255,255,255))
+    background()
+     
+    bananax,bananay = pygame.mouse.get_pos()
+     
+     
+    pygame.draw.circle(screen,(211,211,211),(bananax,bananay),bananarange)
+     
+     
+    for i in banana_farms:
+        pygame.draw.circle(screen,i[2],i[1],i[0])
+     
+     
+     
+    pygame.draw.circle(screen,(0,0,0),(bananax,bananay),25)
+     
+    banana_farmhit=pygame.Rect(0,0,45,45)
+    banana_farmhit.center=(bananax,bananay)
+     
+    for i in banana_farmshit:
+        pygame.draw.rect(screen,(255,0,0),i)
+     
 
 def draw_monkeys():
     #dartmonkey
@@ -182,6 +249,17 @@ def draw_monkeys():
     
     for i in tack_shootershit:
         pygame.draw.rect(screen,(255,0,0),i)
+    
+    #snipermonkey
+    for i in range(len(sniper_monkeys)):
+        sniper_monkeyhit=pygame.Rect(0,0,45,45)
+        sniper_monkeyhit.center=(snipestayx,snipestayy)
+        sniper_monkeyshit.append(sniper_monkeyhit)
+    for i in sniper_monkeys:
+        pygame.draw.circle(screen,i[2],i[1],i[0])
+    
+    for i in sniper_monkeyshit:
+        pygame.draw.rect(screen,(255,0,0),i)   
 
     
 dart_monkeys=[]
@@ -196,16 +274,27 @@ tack_shooters=[]
 tack_shootershit=[]
 tack_shootershootbox=[]
 
+banana_farms=[]
+banana_farmshit=[]
+
+sniper_monkeys=[]
+sniper_monkeyshit=[]
+sniper_monkeyshootbox=[]
+
 dart_monkeyhit=pygame.Rect(0,0,25,25)
 
 
 dart_monkeyshop=pygame.Rect(0,0,50,50)
 tack_shootershop=pygame.Rect(0,0,50,50)
 boomerang_monkeyshop=pygame.Rect(0,0,50,50)
+banana_farmshop=pygame.Rect(0,0,50,50)
+sniper_monkeyshop=pygame.Rect(0,0,50,50)
 
-dart_monkeyshop.center=(850,125)
-tack_shootershop.center=(850,225)
-boomerang_monkeyshop.center=(850,325)
+dart_monkeyshop.center=(800,125)
+tack_shootershop.center=(800,225)
+boomerang_monkeyshop.center=(800,325)
+banana_farmshop.center=(900,125)
+sniper_monkeyshop.center=(900,225)
 
 playarea=pygame.Rect(0,0,700,600)
 
@@ -221,7 +310,11 @@ pygame.display.update()
 dartrange=125
 boomrange=150
 tackrange=75
+sniperange=600
+bananarange=50
 
+sniper_monkeybought=False
+sniperplaced=False
 tack_shooterbought=False
 tackplaced=False
 boomerang_monkeybought=False
@@ -259,6 +352,15 @@ while running:
             tackstayx, tackstayy=pygame.mouse.get_pos()
             tackplaced=True
         
+        
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if sniper_monkeyshop.collidepoint(event.pos):
+                sniper_monkeybought=True
+        if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and sniper_monkeybought:
+            sniper_monkeybought=False
+            snipestayx, snipestayy=pygame.mouse.get_pos()
+            sniperplaced=True
+        
             
     mousex, mousey=pygame.mouse.get_pos()
     
@@ -283,6 +385,14 @@ while running:
     if tackplaced:
         tack_shooterplaced()
         tackplaced=False
+    
+    if sniper_monkeybought:
+        if playarea.collidepoint(mousex,mousey):
+            sniper_monkeyplace()
+    
+    if sniperplaced:
+        sniper_monkeyplaced()
+        sniperplaced=False
         
     draw_monkeys()       
     background()
