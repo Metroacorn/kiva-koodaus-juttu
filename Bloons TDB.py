@@ -77,8 +77,6 @@ curway=polku()
 screen.fill((255, 255, 255))
 
 def background():
-    pygame.draw.rect(screen,(255,0,0),start)
-    pygame.draw.rect(screen,(255,0,0),end) 
     pygame.draw.rect(screen,(139, 69, 19),shop)    
     pygame.draw.rect(screen,(0,255,0),dart_monkeyshop)
     pygame.draw.rect(screen,(0,255,0),tack_shootershop)
@@ -370,7 +368,7 @@ playarea=pygame.Rect(0,0,700,600)
 
 start=pygame.Rect(0,0,50,50)
 end=pygame.Rect(0,0,50,50)
-start.center=(25,100)
+start.center=(25,125)
 end.center=(625,575)
 
 shop=pygame.Rect(700,0,300,600)
