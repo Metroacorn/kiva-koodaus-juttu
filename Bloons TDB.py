@@ -4,9 +4,112 @@ import math
 pygame.init()
 
 screen = pygame.display.set_mode((1000,600))
+clock = pygame.time.Clock()
 grid = [[0 for _ in range(14)] for _ in range(12)]
-
+c_v=1
 curway = []
+#hp
+red_hp=1
+blue_hp=3
+green_hp=7
+yellow_hp=11
+purple_hp=16
+p_hp=100
+#dmg
+red_dmg=1
+blue_dmg=4
+green_dmg=8
+yellow_dmg=13
+purple_dmg=20
+#points
+red_p=2
+blue_p=6
+green_p=9
+yellow_p=14
+purple_p=20
+#speeds
+red_s=1
+blue_s=1.5
+green_s=1.7
+yellow_s=2.4
+purple_s=3
+
+
+h_v=5
+wave_points=100
+
+red=[]
+blue=[]
+blue.append((0, 0, 255))
+blue.append(blue_dmg)
+blue.append(blue_hp)
+green=[]
+green.append((0, 255, 0))
+green.append(green_dmg)
+green.append(green_hp)
+yellow=[]
+yellow.append((255, 255, 0))
+yellow.append(yellow_dmg)
+yellow.append(yellow_hp)
+purple=[]
+purple.append((128, 0, 128))
+purple.append(purple_dmg)
+purple.append(purple_hp)
+
+red.append((255, 0, 0))
+red.append(red_dmg)
+red.append(red_hp)
+
+
+
+red_c=[]
+blue_c=[]
+green_c=[]
+yellow_c=[]
+purple_c=[]
+
+
+for i in range(1,1000):
+    if i<35:
+        red_c.append(i)
+    if i<70 and i>20:
+        blue_c.append(i)
+    if i<140 and i>60:
+        green_c.append(i)
+    if i<230 and i>100:
+        yellow_c.append(i)
+    if i>200:
+        purple_c.append(i)
+
+def waves(wave_points, h_v, c_v):
+    
+    wave_list=[]
+    start_x = curway[0][1] * 50 + 25
+    start_y = curway[0][0] * 50 + 25
+    while wave_points>2:
+        ok=random.randint(1,20+h_v)
+        if ok in red_c:
+            wave_list.append([red[0],red[1],red[2],[start_x,start_y],red_s,1])
+            wave_points-=red_p
+        if ok in blue_c:
+            wave_list.append([blue[0],blue[1],blue[2],[start_x,start_y],blue_s,1])
+            wave_points-=blue_p
+        if ok in green_c:
+            wave_list.append([green[0],green[1],green[2],[start_x,start_y],green_s,1])
+            wave_points-=green_p
+        if ok in yellow_c:
+            wave_list.append([yellow[0],yellow[1],yellow[2],[start_x,start_y],yellow_s,1])
+            wave_points-=yellow_p
+        if ok in purple_c:
+            wave_list.append([purple[0],purple[1],purple[2],[start_x,start_y],purple_s,1])
+            wave_points-=purple_p
+        if ok > 1000:
+            wave_list.append([purple[0],purple[1],purple[2],[start_x,start_y],purple_s,1])
+            wave_points-=purple_p
+    return wave_list
+            
+    
+    
 
 def polku():
     
@@ -481,6 +584,23 @@ dart_monkeybought=False
 running = True
 
 while running:
+    clock.tick(60)
+    
+    if len(spawn_queue)==0 and len(active_enemies)==0:
+        
+        spawn_queue=waves(wave_points, h_v, c_v)
+        c_v+=1
+        h_v=h_v+c_v*2
+        wave_points+=wave_points*0.5
+    
+    current_time = pygame.time.get_ticks()
+    if len(spawn_queue) > 0 and current_time - last_spawn_time >= SPAWN_DELAY:
+        active_enemies.append(spawn_queue.pop(0))
+        last_spawn_time = current_time
+
+
+
+    
     dartoverlap=False
     boomoverlap=False
     tackoverlap=False
@@ -624,6 +744,33 @@ while running:
         rect = pygame.Rect(pos[1] * 50, pos[0] * 50, 50, 50)
         pygame.draw.rect(screen, (211, 211, 211), rect)
         pygame.draw.rect(screen, (200, 211, 0), rect, 1)    
+    draw_monkeys()       
+    background()
+    for i in active_enemies:
+        pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 20)
+    
+    # Movement system
+    for enemy in active_enemies[:]:
+        if enemy[5] >= len(curway):
+            p_hp -= enemy[1]
+            active_enemies.remove(enemy)
+            continue
+
+        target = curway[enemy[5]]
+        tx = target[1] * 50 + 25
+        ty = target[0] * 50 + 25
+
+        dx = tx - enemy[3][0]
+        dy = ty - enemy[3][1]
+        dist = (dx**2 + dy**2) ** 0.5
+
+        if dist <= enemy[4]:
+            enemy[3][0] = tx
+            enemy[3][1] = ty
+            enemy[5] += 1
+        elif dist > 0:
+            enemy[3][0] += enemy[4] * dx / dist
+            enemy[3][1] += enemy[4] * dy / dist)    
     draw_monkeys()       
     background()
     pygame.display.update()
