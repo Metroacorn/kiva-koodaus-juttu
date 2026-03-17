@@ -37,7 +37,10 @@ purple_s=3
 
 h_v=5
 wave_points=100
-
+spawn_queue=[]    
+active_enemies=[]  
+last_spawn_time=0
+SPAWN_DELAY=500   
 red=[]
 blue=[]
 blue.append((0, 0, 255))
