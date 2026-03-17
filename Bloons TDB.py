@@ -548,7 +548,10 @@ banana_farmshop.center=(900,125)
 sniper_monkeyshop.center=(900,225)
 
 playarea=pygame.Rect(0,0,700,600)
-
+spawn_queue=[]    
+active_enemies=[]  
+last_spawn_time=0
+SPAWN_DELAY=500
 start=pygame.Rect(0,0,50,50)
 end=pygame.Rect(0,0,50,50)
 start.center=(25,125)
@@ -586,7 +589,7 @@ dartplaced=False
 dart_monkeybought=False
 running = True
 
-while running:
+while running and p_hp>0:
     clock.tick(60)
     
     if len(spawn_queue)==0 and len(active_enemies)==0:
@@ -773,7 +776,7 @@ while running:
             enemy[5] += 1
         elif dist > 0:
             enemy[3][0] += enemy[4] * dx / dist
-            enemy[3][1] += enemy[4] * dy / dist)    
+            enemy[3][1] += enemy[4] * dy / dist
     draw_monkeys()       
     background()
     pygame.display.update()
