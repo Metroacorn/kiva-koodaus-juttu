@@ -445,7 +445,30 @@ def spawnbanana(i):
     
     bananas.append(banana)
 
-def dart_monkeyshoot(x):
+def dart_monkeyshoot(i,balloonx,balloony):
+    
+    if dart_monkeycooldowns[i]==0:
+        dart_monkeycooldowns[i]=dartcooldown
+        
+        x,y=dart_monkeyshit[i].center
+            
+        dartbullet(x,y,balloonx,balloony)
+
+
+def dartbullet(x,y,balloonx,balloony):
+    dx=balloonx-x
+    dy=balloony-y
+    
+    distance=math.sqrt(dx**2+dy**2)
+    
+    if distance !=0:
+        dx /= distance
+        dy /= distance
+    
+    speed=5
+    
+    darts.append([x,y,dx,dy,speed])
+    
     
     
     
@@ -522,6 +545,7 @@ dart_monkeys=[]
 dart_monkeyshit=[]
 dart_monkeyshootbox=[] 
 dart_monkeycooldowns=[]
+darts=[]
  
 
 boomerang_monkeys=[]
@@ -532,7 +556,7 @@ boomerang_monkeycooldowns=[]
 tack_shooters=[]
 tack_shootershit=[]
 tack_shootershootbox=[]
-tack:shootercooldowns=[]
+tack_shootercooldowns=[]
 
 banana_farms=[]
 banana_farmshit=[]
@@ -592,7 +616,7 @@ bananacost=1000
 bananacooldown=600
 dartcooldown=30
 boomcooldown=120
-snipecoldown=180
+snipecooldown=180
 tackcooldown=60
 
 banana_farmbought=False
@@ -739,6 +763,10 @@ while running and p_hp>0:
     if dartplaced:
         dart_monkeyplaced()
         dartplaced=False
+    
+    for i in active_enemies:
+        if i[2]
+    
         
     if boomerang_monkeybought:
         if playarea.collidepoint(mousex,mousey):
