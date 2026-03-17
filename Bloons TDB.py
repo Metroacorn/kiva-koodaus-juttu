@@ -851,6 +851,10 @@ while running and p_hp>0:
             enemy[3][0] += enemy[4] * dx / dist
             enemy[3][1] += enemy[4] * dy / dist
     draw_monkeys()       
+    wave_text = font.render(f"Wave: {c_v}", True, (0, 0, 0))
+    hp_text = font.render(f"HP: {p_hp}", True, (0, 0, 0))
+    screen.blit(wave_text, (600, 10))
+    screen.blit(hp_text, (500, 10))
     background()
     pygame.display.update()
 
