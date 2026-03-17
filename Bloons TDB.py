@@ -1,5 +1,6 @@
 import pygame
 import random
+import math
 pygame.init()
 
 screen = pygame.display.set_mode((1000,600))
@@ -83,8 +84,12 @@ def background():
     pygame.draw.rect(screen,(0,255,0),boomerang_monkeyshop)
     pygame.draw.rect(screen,(0,255,0),banana_farmshop)
     pygame.draw.rect(screen,(0,255,0),sniper_monkeyshop)
+    font=pygame.font.SysFont(None,36)
+    moneytext=font.render(f"Money:{money}",True,(0,0,0))
     
+    screen.blit(moneytext,(10,10))
 
+    
 def dart_monkeyplace():
     screen.fill((255,255,255))
     background()
@@ -281,7 +286,61 @@ def banana_farmplace():
      
     for i in banana_farmshit:
         pygame.draw.rect(screen,(255,0,0),i)
+
+def banana_farmplaced():
+     bananashoot=[bananarange,(bananastayx,bananastayy),(211,211,211)]
      
+     banana_farmshootbox.append(bananashoot)
+     
+     d=[25,(bananastayx,bananastayy),(0,0,0)]
+     
+     banana_farmcooldowns.append(bananacooldown)
+     
+     banana_farms.append(d)
+     for i in range(len(banana_farms)):
+         banana_farmhit=pygame.Rect(0,0,45,45)
+         banana_farmhit.center=(bananastayx,bananastayy)
+         banana_farmshit.append(banana_farmhit)
+     for i in banana_farms:
+         pygame.draw.circle(screen,i[2],i[1],i[0])
+     
+     for i in banana_farmshit:
+         pygame.draw.rect(screen,(255,0,0),i)   
+    
+     pygame.draw.rect(screen,(255,0,0),banana_farmhit)
+
+def banana_farmfarm(x):
+    banana_farmcooldowns[x]-=1
+    if banana_farmcooldowns[x]==0:
+        banana_farmcooldowns[x]=bananacooldown
+        spawnbanana(x)
+
+def spawnbanana(i):
+    cx, cy=banana_farmshootbox[i][1]
+    r=bananarange
+    
+    angle=random.uniform(0,2 * math.pi)
+    
+    x=cx*r*math.cosin(angle)
+    y=cy*r*math.sin(angle)
+    
+    bananahit=pygame.Rect(0,0,4,4)
+    bananahit.center=(x,y)
+    
+    bananashit.append(bananahit)
+    
+    banana=[1,(x,y),(255,0,0)]
+    
+    bananas.append(banana)
+    
+    pygame.draw.circle(banana[2])
+    
+    
+    
+    
+    
+    
+    
 
 def draw_monkeys():
     #dartmonkey
@@ -328,7 +387,21 @@ def draw_monkeys():
     
     for i in sniper_monkeyshit:
         pygame.draw.rect(screen,(255,0,0),i)   
-
+    
+    #bananafarm
+    for i in range(len(banana_farms)):
+        banana_farmhit=pygame.Rect(0,0,45,45)
+        banana_farmhit.center=(bananastayx,bananastayy)
+        banana_farmshit.append(banana_farmhit)
+    for i in banana_farms:
+        pygame.draw.circle(screen,i[2],i[1],i[0])
+    
+    for i in banana_farmshit:
+        pygame.draw.rect(screen,(255,0,0),i)  
+    
+    for i in bananas:
+        pygame.draw.circle(i)
+        
     
 dart_monkeys=[]
 dart_monkeyshit=[]
@@ -344,6 +417,10 @@ tack_shootershootbox=[]
 
 banana_farms=[]
 banana_farmshit=[]
+banana_farmshootbox=[]
+banana_farmcooldowns=[]
+bananas=[]
+bananashit=[]
 
 sniper_monkeys=[]
 sniper_monkeyshit=[]
@@ -375,12 +452,24 @@ shop=pygame.Rect(700,0,300,600)
 
 pygame.display.update()
 
+money=250
+
 dartrange=125
 boomrange=150
 tackrange=75
 sniperange=600
 bananarange=50
 
+dartcost=50
+boomcost=150
+tackcost=100
+snipercost=500
+bananacost=0
+
+bananacooldown=600
+
+banana_farmbought=False
+bananaplaced=False
 sniper_monkeybought=False
 sniperplaced=False
 tack_shooterbought=False
@@ -392,42 +481,100 @@ dart_monkeybought=False
 running = True
 
 while running:
+    dartoverlap=False
+    boomoverlap=False
+    tackoverlap=False
+    snipeoverlap=False
+    bananaoverlap=False
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             if dart_monkeyshop.collidepoint(event.pos):
-                dart_monkeybought=True
+                if money>=dartcost:    
+                    dart_monkeybought=True
+                    money-=dartcost
         if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and dart_monkeybought:
-            dart_monkeybought=False
-            dartstayx, dartstayy=pygame.mouse.get_pos()
-            dartplaced=True
+            mousex, mousey=pygame.mouse.get_pos()
+            for i in curway:
+                if mousey//50==i[0] and mousex//50==i[1]:
+                    dartoverlap=True
+            if not dartoverlap:    
+                dart_monkeybought=False
+                dartstayx, dartstayy=pygame.mouse.get_pos()
+                dartplaced=True
+            
         
         if event.type == pygame.MOUSEBUTTONDOWN:
             if boomerang_monkeyshop.collidepoint(event.pos):
-                boomerang_monkeybought=True
+                if money>=boomcost:
+                    boomerang_monkeybought=True
+                    money-=boomcost
         if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and boomerang_monkeybought:
-            boomerang_monkeybought=False
-            boomstayx, boomstayy=pygame.mouse.get_pos()
-            boomplaced=True
+            mousex, mousey=pygame.mouse.get_pos()
+            for i in curway:
+                if mousey//50==i[0] and mousex//50==i[1]:
+                    boomoverlap=True
+                
+            if not boomoverlap:
+                boomerang_monkeybought=False
+                boomstayx, boomstayy=pygame.mouse.get_pos()
+                boomplaced=True
+                
+            
         
         
         if event.type == pygame.MOUSEBUTTONDOWN:
             if tack_shootershop.collidepoint(event.pos):
-                tack_shooterbought=True
+                if money>=tackcost:
+                    
+                    tack_shooterbought=True
+                    money-=tackcost
         if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and tack_shooterbought:
-            tack_shooterbought=False
-            tackstayx, tackstayy=pygame.mouse.get_pos()
-            tackplaced=True
+            mousex, mousey=pygame.mouse.get_pos()
+            for i in curway:
+                if mousey//50==i[0] and mousex//50==i[1]:
+                    tackoverlap=True
+                
+            if not tackoverlap:
+                tack_shooterbought=False
+                tackstayx, tackstayy=pygame.mouse.get_pos()
+                tackplaced=True
+            
         
         
         if event.type == pygame.MOUSEBUTTONDOWN:
             if sniper_monkeyshop.collidepoint(event.pos):
-                sniper_monkeybought=True
+                if money>=snipercost:
+                    
+                    sniper_monkeybought=True
+                    money-=snipercost
         if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and sniper_monkeybought:
-            sniper_monkeybought=False
-            snipestayx, snipestayy=pygame.mouse.get_pos()
-            sniperplaced=True
+            mousex, mousey=pygame.mouse.get_pos()
+            for i in curway:
+                if mousey//50==i[0] and mousex//50==i[1]:
+                    snipeoverlap=True
+            
+            if not snipeoverlap:
+                sniper_monkeybought=False
+                snipestayx, snipestayy=pygame.mouse.get_pos()
+                sniperplaced=True
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if banana_farmshop.collidepoint(event.pos):
+                if money>=bananacost:
+                    
+                    banana_farmbought=True
+                    money-=bananacost
+        if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and banana_farmbought:
+            mousex, mousey = pygame.mouse.get_pos()
+            for i in curway:
+                if mousey//50==i[0] and mousex//50 == i[1]:
+                    bananaoverlap=True
+            
+            if not bananaoverlap:
+                banana_farmbought=False
+                bananastayx, bananastayy = pygame.mouse.get_pos()
+                bananaplaced=True
         
             
     mousex, mousey=pygame.mouse.get_pos()
@@ -461,6 +608,18 @@ while running:
     if sniperplaced:
         sniper_monkeyplaced()
         sniperplaced=False
+    
+    if banana_farmbought:
+        if playarea.collidepoint(mousex, mousey):
+            banana_farmplace()
+    
+    if bananaplaced:
+        banana_farmplaced()
+        bananaplaced=False
+    
+    for i in range(len(banana_farms)):
+        banana_farmfarm(i)
+    
     for pos in curway:
         rect = pygame.Rect(pos[1] * 50, pos[0] * 50, 50, 50)
         pygame.draw.rect(screen, (211, 211, 211), rect)
