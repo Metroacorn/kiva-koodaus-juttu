@@ -190,7 +190,7 @@ def background():
     pygame.draw.rect(screen,(0,255,0),boomerang_monkeyshop)
     pygame.draw.rect(screen,(0,255,0),banana_farmshop)
     pygame.draw.rect(screen,(0,255,0),sniper_monkeyshop)
-    font=pygame.font.SysFont(None,36)
+    
     moneytext=font.render(f"Money:{money}",True,(0,0,0))
     
     screen.blit(moneytext,(10,10))
@@ -427,19 +427,18 @@ def spawnbanana(i):
     
     angle=random.uniform(0,2 * math.pi)
     
-    x=cx*r*math.cosin(angle)
-    y=cy*r*math.sin(angle)
+    x=cx+r*math.cos(angle)
+    y=cy+r*math.sin(angle)
     
-    bananahit=pygame.Rect(0,0,4,4)
+    bananahit=pygame.Rect(0,0,10,10)
     bananahit.center=(x,y)
     
     bananashit.append(bananahit)
     
-    banana=[1,(x,y),(255,0,0)]
+    banana=[7,(x,y),(255,0,0)]
     
     bananas.append(banana)
     
-    pygame.draw.circle(banana[2])
     
     
     
@@ -506,9 +505,11 @@ def draw_monkeys():
         pygame.draw.rect(screen,(255,0,0),i)  
     
     for i in bananas:
-        pygame.draw.circle(i)
+        pygame.draw.circle(screen,i[2],i[1],i[0])
         
-    
+        
+font=pygame.font.SysFont(None,36)
+
 dart_monkeys=[]
 dart_monkeyshit=[]
 dart_monkeyshootbox=[]  
@@ -590,6 +591,7 @@ dart_monkeybought=False
 running = True
 
 while running and p_hp>0:
+    screen.fill((255,255,255))
     clock.tick(60)
     
     if len(spawn_queue)==0 and len(active_enemies)==0:
@@ -702,6 +704,14 @@ while running and p_hp>0:
                 bananastayx, bananastayy = pygame.mouse.get_pos()
                 bananaplaced=True
         
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            for i in range(len(bananashit)):
+                if bananashit[i-1].collidepoint(event.pos):
+                    bananashit.pop(i-1)
+                    bananas.pop(i-1)
+                    money+=10
+                    
+        
             
     mousex, mousey=pygame.mouse.get_pos()
     
@@ -746,12 +756,14 @@ while running and p_hp>0:
     for i in range(len(banana_farms)):
         banana_farmfarm(i)
     
+    if len(bananas)>100:
+        bananas.pop(0)
+        bananashit.pop(0)
     for pos in curway:
         rect = pygame.Rect(pos[1] * 50, pos[0] * 50, 50, 50)
         pygame.draw.rect(screen, (211, 211, 211), rect)
         pygame.draw.rect(screen, (200, 211, 0), rect, 1)    
-    draw_monkeys()       
-    background()
+
     for i in active_enemies:
         pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 20)
     
