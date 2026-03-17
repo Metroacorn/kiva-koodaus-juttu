@@ -118,67 +118,82 @@ def polku():
     
     start_pos = [2, 0]
     end_pos = [11, 12]
+    
+    best_path = None
+    best_length = 0
+    
+    for attempt in range(15):
+        path = [list(start_pos)]
+        visited = set()
+        visited.add((start_pos[0], start_pos[1]))
+        c = list(start_pos)
 
-    path = [list(start_pos)]
-    visited = set()
-    visited.add((start_pos[0], start_pos[1]))
-    c = list(start_pos)
+        while c != end_pos:
+            pm = []
+            directions = [[-1, 0], [1, 0], [0, -1], [0, 1]]
 
-    while c != end_pos:
-        pm = []
-        directions = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+            for d in directions:
+                ny = c[0] + d[0]
+                nx = c[1] + d[1]
 
-        for d in directions:
-            ny = c[0] + d[0]
-            nx = c[1] + d[1]
-
-            if 0 <= ny < 12 and 0 <= nx < 14 and (ny, nx) not in visited:
-                
-                bo = True
-                for cy, cx in [(-1, -1), (-1, 0), (0, -1), (0, 0)]:
+                if 0 <= ny < 12 and 0 <= nx < 14 and (ny, nx) not in visited:
                     
-                    by, bx = ny + cy, nx + cx
-                    if 0 <= by < 11 and 0 <= bx < 13:
-                        ok = []
-                        for dy2 in range(2):
-                            for dx2 in range(2):
-                                pos = (by + dy2, bx + dx2)
-                                if pos == (ny, nx) or pos in visited:
-                                    ok.append(1)
-                                else:
-                                    ok.append(0)
-                        if sum(ok) >= 4:
-                            bo = False
-                            break
-                if bo:
-                     
-                    weight = 1
-                    if d[0] > 0 and ny <= end_pos[0]:
-                        weight = 3
-                    if d[1] > 0 and nx <= end_pos[1]:
-                        weight = 3
-                    for _ in range(weight):
-                        pm.append([ny, nx])
+                    bo = True
+                    for cy, cx in [(-1, -1), (-1, 0), (0, -1), (0, 0)]:
+                        
+                        by, bx = ny + cy, nx + cx
+                        if 0 <= by < 11 and 0 <= bx < 13:
+                            ok = []
+                            for dy2 in range(2):
+                                for dx2 in range(2):
+                                    pos = (by + dy2, bx + dx2)
+                                    if pos == (ny, nx) or pos in visited:
+                                        ok.append(1)
+                                    else:
+                                        ok.append(0)
+                            if sum(ok) >= 4:
+                                bo = False
+                                break
+                    if bo:
+                        weight = 1
+                        
+                        if d[0] < 0 and ny >= 1:
+                            weight = 3
+                        if d[1] < 0 and nx >= 1:
+                            weight = 2
+                        
+                        if len(path) > 20:
+                            if d[0] > 0 and ny <= end_pos[0]:
+                                weight = 4
+                            if d[1] > 0 and nx <= end_pos[1]:
+                                weight = 4
+                        
+                        for _ in range(weight):
+                            pm.append([ny, nx])
 
-        if not pm:
-            
-            if len(path) <= 1:
-                path = [list(start_pos)]
-                visited = set()
-                visited.add((start_pos[0], start_pos[1]))
-                c = list(start_pos)
+            if not pm:
+                
+                if len(path) <= 1:
+                    path = [list(start_pos)]
+                    visited = set()
+                    visited.add((start_pos[0], start_pos[1]))
+                    c = list(start_pos)
+                    continue
+                path.pop()
+                visited.add((c[0], c[1]))
+                c = list(path[-1])
                 continue
-            path.pop()
-            visited.add((c[0], c[1]))
-            c = list(path[-1])
-            continue
 
-        next_pos = random.choice(pm)
-        c = next_pos
-        visited.add((c[0], c[1]))
-        path.append(list(c))
+            next_pos = random.choice(pm)
+            c = next_pos
+            visited.add((c[0], c[1]))
+            path.append(list(c))
         
-    return path
+        if len(path) > best_length:
+            best_length = len(path)
+            best_path = path
+    
+    return best_path
 
 curway=polku()
 screen.fill((255, 255, 255))
