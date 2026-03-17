@@ -780,7 +780,8 @@ while running and p_hp>0:
         dartplaced=False
     
     for i in active_enemies:
-        if i[2]
+        for n in range(len(dart_monkeys)):
+            dart_monkeyshoot(n,i)
     
         
     if boomerang_monkeybought:
