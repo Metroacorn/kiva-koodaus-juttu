@@ -272,6 +272,8 @@ def boomerang_monkeyplaced():
     
     d=[25,(boomstayx,boomstayy),(0,0,0)]
     
+         
+    
     boomerang_monkeys.append(d)
     for i in range(len(boomerang_monkeys)):
         boomerang_monkeyshit=pygame.Rect(0,0,45,45)
@@ -313,6 +315,8 @@ def tack_shooterplaced():
     tack_shootershootbox.append(tackshoot)
     
     d=[25,(tackstayx,tackstayy),(0,0,0)]
+    
+    tack_shootercooldowns.append(tackcooldown)
     
     tack_shooters.append(d)
     for i in range(len(tack_shooters)):
@@ -356,6 +360,8 @@ def sniper_monkeyplaced():
     sniper_monkeyshootbox.append(snipeshoot)
     
     d=[25,(snipestayx,snipestayy),(0,0,0)]
+    
+    sniper_monkeycooldowns.append(snipecooldown)
     
     sniper_monkeys.append(d)
     for i in range(len(sniper_monkeys)):
@@ -438,6 +444,8 @@ def spawnbanana(i):
     banana=[7,(x,y),(255,0,0)]
     
     bananas.append(banana)
+
+def dart_monkeyshoot(x):
     
     
     
@@ -512,15 +520,19 @@ font=pygame.font.SysFont(None,36)
 
 dart_monkeys=[]
 dart_monkeyshit=[]
-dart_monkeyshootbox=[]  
+dart_monkeyshootbox=[] 
+dart_monkeycooldowns=[]
+ 
 
 boomerang_monkeys=[]
 boomerang_monkeyhit=[]
 boomerang_monkeyshootbox=[]
+boomerang_monkeycooldowns=[]
 
 tack_shooters=[]
 tack_shootershit=[]
 tack_shootershootbox=[]
+tack:shootercooldowns=[]
 
 banana_farms=[]
 banana_farmshit=[]
@@ -532,6 +544,7 @@ bananashit=[]
 sniper_monkeys=[]
 sniper_monkeyshit=[]
 sniper_monkeyshootbox=[]
+sniper_monkeycooldowns=[]
 
 dart_monkeyhit=pygame.Rect(0,0,25,25)
 
@@ -574,9 +587,13 @@ dartcost=50
 boomcost=150
 tackcost=100
 snipercost=500
-bananacost=0
+bananacost=1000
 
 bananacooldown=600
+dartcooldown=30
+boomcooldown=120
+snipecoldown=180
+tackcooldown=60
 
 banana_farmbought=False
 bananaplaced=False
