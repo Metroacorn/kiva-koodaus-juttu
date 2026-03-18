@@ -730,7 +730,7 @@ while running and p_hp>0:
         active_enemies.append(spawn_queue.pop(0))
         last_spawn_time = current_time
         if c_v>15:
-            cl=random.randint(1,100)
+            cl=random.randint(1,40)
             if cl==5 and clump==True:
                 SPAWN_DELAY=100
                 clump=False
