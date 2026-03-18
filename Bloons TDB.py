@@ -727,24 +727,30 @@ while running and p_hp>0:
     
     current_time = pygame.time.get_ticks()
     if len(spawn_queue) > 0 and current_time - last_spawn_time >= SPAWN_DELAY:
-        active_enemies.append(spawn_queue.pop(0))
-        last_spawn_time = current_time
-        if c_v>15:
-            cl=random.randint(1,40)
-            if cl==5 and clump==True:
-                SPAWN_DELAY=100
-                clump=False
-    if current_time-m>cooldown:
-        m=current_time
-        clump=True
-        cooldown=random.randint(200,40000)
+        if clump == False: 
+            start_x = curway[0][1] * 50 + 25
+            start_y = curway[0][0] * 50 + 25 
+            new_balloon = [cb[0], cb[1], cb[2], [start_x, start_y], cb[4], 1, cb[6], cb[7]]
+            active_enemies.append(new_balloon)
+            if current_time-oko>dur:
+                oko=current_time
+                SPAWN_DELAY=500
+                dur=random.randint(1000,10000)
+                clump=True
+        else:
+            active_enemies.append(spawn_queue.pop(0))
+            last_spawn_time = current_time
+            if c_v > 0:
+                cl = random.randint(1, 6)
+                if cl == 5 and clump == True and current_time-m>cooldown:
+                    SPAWN_DELAY = 100
+                    clump = False 
+                    last = active_enemies[-1]
+                    cb = [last[0], last[1], last[2], None, last[4], last[5], last[6], last[7]] 
+                    cooldown=random.randint(20000,400000)
         
-        
-        
-    if current_time-oko>dur:
+    if clump==True:
         oko=current_time
-        SPAWN_DELAY=500
-        dur=random.randint(1000,10000)
 
 
     
