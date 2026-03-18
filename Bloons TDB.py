@@ -3,24 +3,61 @@ import random
 import math
 pygame.init()
 
+
+
+
+
+
+def pop(arvo, pallo):
+    if arvo == 0:
+        active_enemies.remove(pallo)
+    else:
+        active_enemies.remove(pallo)
+        arvo -= 1
+
+        p1 = pallo[3][:]
+        p2 = pallo[3][:]
+
+        if pallo[5] >= 1:
+            pw = curway[pallo[5] - 1]
+            px = pw[1] * 50 + 25
+            py = pw[0] * 50 + 25
+            dx = px - p2[0]
+            dy = py - p2[1]
+            dist = (dx**2 + dy**2) ** 0.5
+            if dist > 0:
+                offset = 30  
+                p2[0] += offset * dx / dist
+                p2[1] += offset * dy / dist
+
+        active_enemies.append([arvot[arvo][0], arvot[arvo][1], arvot[arvo][2], p1, pallo[4], pallo[5], pallo[6]-1, pallo[7]**4])
+        active_enemies.append([arvot[arvo][0], arvot[arvo][1], arvot[arvo][2], p2, pallo[4], pallo[5], pallo[6]-1, pallo[7]**3])
+
+
+
+
+
+
+
+
 screen = pygame.display.set_mode((1000,600))
 clock = pygame.time.Clock()
 grid = [[0 for _ in range(14)] for _ in range(12)]
-c_v=1
+c_v=0
 curway = []
 #hp
 red_hp=1
-blue_hp=3
-green_hp=7
-yellow_hp=11
-purple_hp=16
+blue_hp=1
+green_hp=1
+yellow_hp=1
+purple_hp=1
 p_hp=100
 #dmg
 red_dmg=1
-blue_dmg=4
-green_dmg=8
-yellow_dmg=13
-purple_dmg=20
+blue_dmg=2
+green_dmg=4
+yellow_dmg=8
+purple_dmg=16
 #points
 red_p=2
 blue_p=6
@@ -85,30 +122,32 @@ for i in range(1,1000):
         purple_c.append(i)
 
 def waves(wave_points, h_v, c_v):
-    
+    i=0
     wave_list=[]
     start_x = curway[0][1] * 50 + 25
     start_y = curway[0][0] * 50 + 25
     while wave_points>2:
         ok=random.randint(1,20+h_v)
+        i+=1
         if ok in red_c:
-            wave_list.append([red[0],red[1],red[2],[start_x,start_y],red_s,1])
+            wave_list.append([red[0],red[1],red[2],[start_x,start_y],red_s,1,0,i])
             wave_points-=red_p
         if ok in blue_c:
-            wave_list.append([blue[0],blue[1],blue[2],[start_x,start_y],blue_s,1])
+            wave_list.append([blue[0],blue[1],blue[2],[start_x,start_y],blue_s,1,1,i])
             wave_points-=blue_p
         if ok in green_c:
-            wave_list.append([green[0],green[1],green[2],[start_x,start_y],green_s,1])
+            wave_list.append([green[0],green[1],green[2],[start_x,start_y],green_s,1,2,i])
             wave_points-=green_p
         if ok in yellow_c:
-            wave_list.append([yellow[0],yellow[1],yellow[2],[start_x,start_y],yellow_s,1])
+            wave_list.append([yellow[0],yellow[1],yellow[2],[start_x,start_y],yellow_s,1,3,i])
             wave_points-=yellow_p
         if ok in purple_c:
-            wave_list.append([purple[0],purple[1],purple[2],[start_x,start_y],purple_s,1])
+            wave_list.append([purple[0],purple[1],purple[2],[start_x,start_y],purple_s,1,4,i])
             wave_points-=purple_p
         if ok > 1000:
-            wave_list.append([purple[0],purple[1],purple[2],[start_x,start_y],purple_s,1])
+            wave_list.append([purple[0],purple[1],purple[2],[start_x,start_y],purple_s,1,5,1])
             wave_points-=purple_p
+            
     return wave_list
             
     
@@ -197,7 +236,12 @@ def polku():
 
 curway=polku()
 screen.fill((255, 255, 255))
-
+arvot=[red,blue,green,yellow,purple]
+clump=True
+dur=3000
+oko=0
+m=0
+cooldown=40000
 def background():
     pygame.draw.rect(screen,(139, 69, 19),shop)    
     pygame.draw.rect(screen,(0,255,0),dart_monkeyshop)
@@ -685,7 +729,20 @@ while running and p_hp>0:
     if len(spawn_queue) > 0 and current_time - last_spawn_time >= SPAWN_DELAY:
         active_enemies.append(spawn_queue.pop(0))
         last_spawn_time = current_time
-
+        if c_v>15:
+            cl=random.randint(1,100)
+            if cl==5 and clump==True:
+                SPAWN_DELAY=100
+                clump=False
+    if current_time-m>cooldown:
+        m=current_time
+        clump=True                
+        
+        
+        
+    if current_time-oko>dur:
+        oko=current_time
+        SPAWN_DELAY=500
 
 
     
@@ -816,7 +873,13 @@ while running and p_hp>0:
     for dart in darts:
         dart[0] += dart[2] * dart[4]
         dart[1] += dart[3] * dart[4]
-        
+
+
+
+    for i in active_enemies:
+        if i[2]<=0:
+            money+=1
+            pop(i[6], i)
     if boomerang_monkeybought:
         if playarea.collidepoint(mousex,mousey):
             boomerang_monkeyplace()
