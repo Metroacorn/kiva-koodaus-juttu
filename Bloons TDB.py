@@ -722,7 +722,7 @@ while running and p_hp>0:
         
         spawn_queue=waves(wave_points, h_v, c_v)
         c_v+=1
-        h_v=h_v+c_v*2
+        h_v=h_v+c_v*3
         wave_points+=wave_points*0.5
     
     current_time = pygame.time.get_ticks()
@@ -740,8 +740,8 @@ while running and p_hp>0:
         else:
             active_enemies.append(spawn_queue.pop(0))
             last_spawn_time = current_time
-            if c_v > 0:
-                cl = random.randint(1, 6)
+            if c_v > 10:
+                cl = random.randint(1, 40)
                 if cl == 5 and clump == True and current_time-m>cooldown:
                     SPAWN_DELAY = 100
                     clump = False 
