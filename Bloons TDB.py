@@ -241,6 +241,8 @@ def dart_monkeyplaced():
     
     d=[25,(dartstayx,dartstayy),(0,0,0)]
     
+    dart_monkeycooldowns.append(dartcooldown)
+    
     dart_monkeys.append(d)
     for i in range(len(dart_monkeys)):
         dart_monkeyhit=pygame.Rect(0,0,45,45)
@@ -287,7 +289,7 @@ def boomerang_monkeyplaced():
     
     d=[25,(boomstayx,boomstayy),(0,0,0)]
     
-         
+    boomerang_monkeycooldowns.append(boomcooldown)     
     
     boomerang_monkeys.append(d)
     for i in range(len(boomerang_monkeys)):
@@ -460,14 +462,20 @@ def spawnbanana(i):
     
     bananas.append(banana)
 
-def dart_monkeyshoot(i,balloonx,balloony):
+def dart_monkeyshoot(i,balloonpos):
     
+
     if dart_monkeycooldowns[i]==0:
         dart_monkeycooldowns[i]=dartcooldown
+    else:
+        return
         
-        x,y=dart_monkeyshit[i].center
+    x, y=dart_monkeyshootbox[i][1]
+    balloonx=balloonpos[0]
+    balloony=balloonpos[1]
+        
             
-        dartbullet(x,y,balloonx,balloony)
+    dartbullet(x,y,balloonx,balloony)
 
 
 def dartbullet(x,y,balloonx,balloony):
@@ -483,6 +491,19 @@ def dartbullet(x,y,balloonx,balloony):
     speed=5
     
     darts.append([x,y,dx,dy,speed])
+
+def in_dart_circle(x,balloonpos):
+
+    Bx=balloonpos[0]
+    By=balloonpos[1]
+    
+
+    
+    r=x[0]
+    
+    Dx, Dy=x[1]
+    
+    return (Bx-Dx)**2 + (By-Dy)**2 <=r**2
     
     
     
@@ -504,6 +525,9 @@ def draw_monkeys():
     
     for i in dart_monkeyshit:
         pygame.draw.rect(screen,(255,0,0),i)
+        
+    for i in range(len(darts)):
+        pygame.draw.circle(screen, (255,0,0), (int(dart[0]), int(dart[1])),5)
     
     #boomerangmonkey
     for i in range(len(boomerang_monkeys)):
@@ -779,10 +803,19 @@ while running and p_hp>0:
         dart_monkeyplaced()
         dartplaced=False
     
-    for i in active_enemies:
-        for n in range(len(dart_monkeys)):
-            dart_monkeyshoot(n,i)
+    for i in range(len(dart_monkeycooldowns)):
+        if dart_monkeycooldowns[i]>0:
+            dart_monkeycooldowns[i]-=1
+    for i in range(len(dart_monkeyshootbox)):
+        for n in active_enemies:
+            if in_dart_circle(dart_monkeyshootbox[i],n[3]):
+                dart_monkeyshoot(i,n[3])
+                break
     
+    
+    for dart in darts:
+        dart[0] += dart[2] * dart[4]
+        dart[1] += dart[3] * dart[4]
         
     if boomerang_monkeybought:
         if playarea.collidepoint(mousex,mousey):
@@ -850,12 +883,13 @@ while running and p_hp>0:
         elif dist > 0:
             enemy[3][0] += enemy[4] * dx / dist
             enemy[3][1] += enemy[4] * dy / dist
-    draw_monkeys()       
+    draw_monkeys() 
     wave_text = font.render(f"Wave: {c_v}", True, (0, 0, 0))
     hp_text = font.render(f"HP: {p_hp}", True, (0, 0, 0))
     screen.blit(wave_text, (600, 10))
-    screen.blit(hp_text, (500, 10))
+    screen.blit(hp_text, (500, 10))      
     background()
     pygame.display.update()
+
 
 pygame.quit()
