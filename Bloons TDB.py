@@ -736,13 +736,15 @@ while running and p_hp>0:
                 clump=False
     if current_time-m>cooldown:
         m=current_time
-        clump=True                
+        clump=True
+        cooldown=random.randint(200,40000)
         
         
         
     if current_time-oko>dur:
         oko=current_time
         SPAWN_DELAY=500
+        dur=random.randint(1000,10000)
 
 
     
