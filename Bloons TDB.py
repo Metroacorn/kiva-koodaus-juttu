@@ -274,9 +274,7 @@ def dart_monkeyplace():
     
     dart_monkeyhit=pygame.Rect(0,0,45,45)
     dart_monkeyhit.center=(dartx,darty)
-    
-    for i in dart_monkeyshit:
-        pygame.draw.rect(screen,(255,0,0),i)
+
 
 def dart_monkeyplaced():
     dartshoot=[dartrange,(dartstayx,dartstayy),(211,211,211)]
@@ -295,13 +293,11 @@ def dart_monkeyplaced():
     for i in dart_monkeys:
         pygame.draw.circle(screen,i[2],i[1],i[0])
     
-    for i in dart_monkeyshit:
-        pygame.draw.rect(screen,(255,0,0),i)
         
     
     
     
-    pygame.draw.rect(screen,(255,0,0),dart_monkeyhit)
+
 
 def boomerang_monkeyplace():
     screen.fill((255,255,255))
@@ -320,10 +316,6 @@ def boomerang_monkeyplace():
     
     pygame.draw.rect(screen,(255,0,0),boomhit)
     
-
-    
-    for i in boomerang_monkeyhit:
-        pygame.draw.rect(screen,(255,0,0),i)
     
 
 def boomerang_monkeyplaced():
@@ -344,8 +336,6 @@ def boomerang_monkeyplaced():
     for i in boomerang_monkeys:
         pygame.draw.circle(screen,i[2],i[1],i[0])
     
-    for i in boomerang_monkeyhit:
-        pygame.draw.rect(screen,(255,0,0),i)
 
 def tack_shooterplace():
     screen.fill((255,255,255))
@@ -366,9 +356,7 @@ def tack_shooterplace():
     
     tack_shooterhit=pygame.Rect(0,0,45,45)
     tack_shooterhit.center=(tackx,tacky)
-    
-    for i in tack_shootershit:
-        pygame.draw.rect(screen,(255,0,0),i)
+
 
 def tack_shooterplaced():
     tackshoot=[tackrange,(tackstayx,tackstayy),(211,211,211)]
@@ -387,8 +375,6 @@ def tack_shooterplaced():
     for i in tack_shooters:
         pygame.draw.circle(screen,i[2],i[1],i[0])
     
-    for i in tack_shootershit:
-        pygame.draw.rect(screen,(255,0,0),i)
         
     
 def sniper_monkeyplace():
@@ -411,9 +397,6 @@ def sniper_monkeyplace():
    sniper_monkeyhit=pygame.Rect(0,0,45,45)
    sniper_monkeyhit.center=(snipex,snipey)
     
-   for i in sniper_monkeyshit:
-       pygame.draw.rect(screen,(255,0,0),i)
-
 def sniper_monkeyplaced():
     
     snipeshoot=[sniperange,(snipestayx,snipestayy),(211,211,211)]
@@ -431,9 +414,7 @@ def sniper_monkeyplaced():
         sniper_monkeyshit.append(sniper_monkeyhit)
     for i in sniper_monkeys:
         pygame.draw.circle(screen,i[2],i[1],i[0])
-    
-    for i in sniper_monkeyshit:
-        pygame.draw.rect(screen,(255,0,0),i)   
+  
    
     pygame.draw.rect(screen,(255,0,0),sniper_monkeyhit) 
 
@@ -457,8 +438,6 @@ def banana_farmplace():
     banana_farmhit=pygame.Rect(0,0,45,45)
     banana_farmhit.center=(bananax,bananay)
      
-    for i in banana_farmshit:
-        pygame.draw.rect(screen,(255,0,0),i)
 
 def banana_farmplaced():
      bananashoot=[bananarange,(bananastayx,bananastayy),(211,211,211)]
@@ -476,9 +455,7 @@ def banana_farmplaced():
          banana_farmshit.append(banana_farmhit)
      for i in banana_farms:
          pygame.draw.circle(screen,i[2],i[1],i[0])
-     
-     for i in banana_farmshit:
-         pygame.draw.rect(screen,(255,0,0),i)   
+      
     
      pygame.draw.rect(screen,(255,0,0),banana_farmhit)
 
@@ -563,9 +540,7 @@ def draw_monkeys():
 
     for i in dart_monkeys:
         pygame.draw.circle(screen,i[2],i[1],i[0])
-    
-    for i in dart_monkeyshit:
-        pygame.draw.rect(screen,(255,0,0),i)
+
         
     for i in range(len(darts)):
         pygame.draw.circle(screen, (255,0,0), (int(dart[0]), int(dart[1])),5)
@@ -576,8 +551,6 @@ def draw_monkeys():
     for i in boomerang_monkeys:
         pygame.draw.circle(screen,i[2],i[1],i[0])
     
-    for i in boomerang_monkeyhit:
-        pygame.draw.rect(screen,(255,0,0),i)
     
     #tackshooter
 
@@ -585,24 +558,18 @@ def draw_monkeys():
     for i in tack_shooters:
         pygame.draw.circle(screen,i[2],i[1],i[0])
     
-    for i in tack_shootershit:
-        pygame.draw.rect(screen,(255,0,0),i)
     
     #snipermonkey
 
     for i in sniper_monkeys:
         pygame.draw.circle(screen,i[2],i[1],i[0])
-    
-    for i in sniper_monkeyshit:
-        pygame.draw.rect(screen,(255,0,0),i)   
+      
     
     #bananafarm
 
     for i in banana_farms:
         pygame.draw.circle(screen,i[2],i[1],i[0])
-    
-    for i in banana_farmshit:
-        pygame.draw.rect(screen,(255,0,0),i)  
+     
     
     for i in bananas:
         pygame.draw.circle(screen,i[2],i[1],i[0])
