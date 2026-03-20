@@ -560,10 +560,7 @@ def in_dart_circle(x,balloonpos):
 
 def draw_monkeys():
     #dartmonkey
-    for i in range(len(dart_monkeys)):
-        dart_monkeyhit=pygame.Rect(0,0,45,45)
-        dart_monkeyhit.center=(dartstayx,dartstayy)
-        dart_monkeyshit.append(dart_monkeyhit)
+
     for i in dart_monkeys:
         pygame.draw.circle(screen,i[2],i[1],i[0])
     
@@ -574,10 +571,7 @@ def draw_monkeys():
         pygame.draw.circle(screen, (255,0,0), (int(dart[0]), int(dart[1])),5)
     
     #boomerangmonkey
-    for i in range(len(boomerang_monkeys)):
-        boomerang_monkeyshit=pygame.Rect(0,0,45,45)
-        boomerang_monkeyshit.center=(boomstayx,boomstayy)
-        boomerang_monkeyhit.append(boomerang_monkeyshit)
+
     
     for i in boomerang_monkeys:
         pygame.draw.circle(screen,i[2],i[1],i[0])
@@ -586,10 +580,8 @@ def draw_monkeys():
         pygame.draw.rect(screen,(255,0,0),i)
     
     #tackshooter
-    for i in range(len(tack_shooters)):
-        tack_shooterhit=pygame.Rect(0,0,45,45)
-        tack_shooterhit.center=(tackstayx,tackstayy)
-        tack_shootershit.append(tack_shooterhit)
+
+
     for i in tack_shooters:
         pygame.draw.circle(screen,i[2],i[1],i[0])
     
@@ -597,10 +589,7 @@ def draw_monkeys():
         pygame.draw.rect(screen,(255,0,0),i)
     
     #snipermonkey
-    for i in range(len(sniper_monkeys)):
-        sniper_monkeyhit=pygame.Rect(0,0,45,45)
-        sniper_monkeyhit.center=(snipestayx,snipestayy)
-        sniper_monkeyshit.append(sniper_monkeyhit)
+
     for i in sniper_monkeys:
         pygame.draw.circle(screen,i[2],i[1],i[0])
     
@@ -608,10 +597,7 @@ def draw_monkeys():
         pygame.draw.rect(screen,(255,0,0),i)   
     
     #bananafarm
-    for i in range(len(banana_farms)):
-        banana_farmhit=pygame.Rect(0,0,45,45)
-        banana_farmhit.center=(bananastayx,bananastayy)
-        banana_farmshit.append(banana_farmhit)
+
     for i in banana_farms:
         pygame.draw.circle(screen,i[2],i[1],i[0])
     
@@ -623,6 +609,8 @@ def draw_monkeys():
         
         
 font=pygame.font.SysFont(None,36)
+
+
 
 dart_monkeys=[]
 dart_monkeyshit=[]
@@ -701,6 +689,8 @@ dartcooldown=30
 boomcooldown=120
 snipecooldown=180
 tackcooldown=60
+
+dartdamage=1
 
 banana_farmbought=False
 bananaplaced=False
@@ -869,10 +859,27 @@ while running and p_hp>0:
                 dart_monkeyshoot(i,n[3])
                 break
     
+            
+    
     
     for dart in darts:
         dart[0] += dart[2] * dart[4]
         dart[1] += dart[3] * dart[4]
+        
+    
+
+    for i in active_enemies:
+        hit=pygame.Rect(0,0,50,50)
+        hit.center=(i[3])
+
+
+
+        for dart in darts[:]:
+            if hit.collidepoint(dart[0],dart[1]):
+                i[2]-=dartdamage
+                darts.remove(dart)
+                break
+            
 
 
 
