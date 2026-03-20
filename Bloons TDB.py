@@ -680,7 +680,7 @@ while running and p_hp>0:
         spawn_queue=waves(wave_points, h_v, c_v)
         c_v+=1
         h_v=h_v+c_v**3
-        wave_points+=wave_points*0.5
+        wave_points+=wave_points*0.1
     
     current_time = pygame.time.get_ticks()
     if len(spawn_queue) > 0 and current_time - last_spawn_time >= SPAWN_DELAY:
@@ -931,7 +931,7 @@ while running and p_hp>0:
     draw_monkeys() 
     wave_text = font.render(f"Wave: {c_v}", True, (0, 0, 0))
     hp_text = font.render(f"HP: {p_hp}", True, (0, 0, 0))
-    screen.blit(wave_text, (600, 10))
+    screen.blit(wave_text, (590, 10))
     screen.blit(hp_text, (500, 10))      
     background()
     pygame.display.update()
