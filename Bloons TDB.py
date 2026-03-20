@@ -39,7 +39,7 @@ def pop(arvo, pallo):
 
 
 
-
+pygame.display.set_caption("Bloons TD")
 screen = pygame.display.set_mode((1000,600))
 clock = pygame.time.Clock()
 grid = [[0 for _ in range(14)] for _ in range(12)]
@@ -314,7 +314,7 @@ def boomerang_monkeyplace():
     boomhit=pygame.Rect(0,0,45,45)
     boomhit.center=(boomx,boomy)
     
-    pygame.draw.rect(screen,(255,0,0),boomhit)
+
     
     
 
@@ -335,7 +335,46 @@ def boomerang_monkeyplaced():
     
     for i in boomerang_monkeys:
         pygame.draw.circle(screen,i[2],i[1],i[0])
+
+def boomerang_monkeyshoot(i,balloonpos):
+    if boomerang_monkeycooldowns[i]==0:
+        boomerang_monkeycooldowns[i]=boomcooldown
+    else:
+        return
+        
+    x, y=boomerang_monkeyshootbox[i][1]
+    balloonx=balloonpos[0]
+    balloony=balloonpos[1]
+        
+            
+    boomerangshoot(x,y,balloonx,balloony)
+
+
+def boomerangshoot(x,y,balloonx,balloony):
+    dx=balloonx-x
+    dy=balloony-y
     
+    distance=math.sqrt(dx**2+dy**2)
+    
+    if distance !=0:
+        dx /= distance
+        dy /= distance
+    
+    speed=5
+    
+    boomerangs.append([x,y,dx,dy,speed])
+    
+def in_boomerang_circle(x,balloonpos):
+    Bx=balloonpos[0]
+    By=balloonpos[1]
+    
+
+    
+    r=x[0]
+    
+    Dx, Dy=x[1]
+    
+    return (Bx-Dx)**2 + (By-Dy)**2 <=r**2
 
 def tack_shooterplace():
     screen.fill((255,255,255))
@@ -457,7 +496,6 @@ def banana_farmplaced():
          pygame.draw.circle(screen,i[2],i[1],i[0])
       
     
-     pygame.draw.rect(screen,(255,0,0),banana_farmhit)
 
 def banana_farmfarm(x):
     banana_farmcooldowns[x]-=1
@@ -551,6 +589,9 @@ def draw_monkeys():
     for i in boomerang_monkeys:
         pygame.draw.circle(screen,i[2],i[1],i[0])
     
+    for i in range(len(boomerangs)):
+        pygame.draw.circle(screen, (255,0,0), (int(boomerang[0]), int(boomerang[1])),5)
+    
     
     #tackshooter
 
@@ -590,6 +631,8 @@ boomerang_monkeys=[]
 boomerang_monkeyhit=[]
 boomerang_monkeyshootbox=[]
 boomerang_monkeycooldowns=[]
+boomerangs=[]
+boomerangdistance=[]
 
 tack_shooters=[]
 tack_shootershit=[]
@@ -658,6 +701,7 @@ snipecooldown=180
 tackcooldown=60
 
 dartdamage=1
+boomdamage=1
 
 banana_farmbought=False
 bananaplaced=False
@@ -841,6 +885,11 @@ while running and p_hp>0:
         dart[0] += dart[2] * dart[4]
         dart[1] += dart[3] * dart[4]
         
+    for dart in darts:
+        if dart[0]>1000 or dart[0]<0:
+            if dart[1]>600 or dart[1]<0:
+                darts.remove(dart)
+            
     
 
     for i in active_enemies:
@@ -868,6 +917,38 @@ while running and p_hp>0:
     if boomplaced:
         boomerang_monkeyplaced()
         boomplaced=False
+        
+    for i in range(len(boomerang_monkeycooldowns)):
+        if boomerang_monkeycooldowns[i]>0:
+            boomerang_monkeycooldowns[i]-=1
+    
+    for i in range(len(boomerang_monkeyshootbox)):
+        for n in active_enemies:
+            if in_dart_circle(boomerang_monkeyshootbox[i],n[3]):
+                boomerang_monkeyshoot(i,n[3])
+                break
+    for boomerang in boomerangs:
+        boomerang[0] += boomerang[2] * boomerang[4]
+        boomerang[1] += boomerang[3] * boomerang[4]
+        
+    for boomerang in boomerangs:
+        if boomerang[0]>1000 or boomerang[0]<0:
+            if boomerang[1]>600 or boomerang[1]<0:
+                boomerangs.remove(boomerang)
+            
+    
+
+    for i in active_enemies:
+        hit=pygame.Rect(0,0,50,50)
+        hit.center=(i[3])
+
+
+
+        for boomerang in boomerangs[:]:
+            if hit.collidepoint(boomerang[0],boomerang[1]):
+                i[2]-=boomdamage
+                
+            
     
     if tack_shooterbought:
         if playarea.collidepoint(mousex,mousey):
