@@ -679,7 +679,7 @@ while running and p_hp>0:
         
         spawn_queue=waves(wave_points, h_v, c_v)
         c_v+=1
-        h_v=h_v+c_v*3
+        h_v=h_v+c_v**3
         wave_points+=wave_points*0.5
     
     current_time = pygame.time.get_ticks()
