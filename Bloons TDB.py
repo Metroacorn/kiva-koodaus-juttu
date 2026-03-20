@@ -691,16 +691,16 @@ while running and p_hp>0:
             active_enemies.append(new_balloon)
             if current_time-oko>dur:
                 oko=current_time
-                SPAWN_DELAY=500
+                SPAWN_DELAY=250
                 dur=random.randint(1000,10000)
                 clump=True
         else:
             active_enemies.append(spawn_queue.pop(0))
             last_spawn_time = current_time
-            if c_v > 10:
+            if c_v > 5:
                 cl = random.randint(1, 40)
                 if cl == 5 and clump == True and current_time-m>cooldown:
-                    SPAWN_DELAY = 100
+                    SPAWN_DELAY = 50
                     clump = False 
                     last = active_enemies[-1]
                     cb = [last[0], last[1], last[2], None, last[4], last[5], last[6], last[7]] 
