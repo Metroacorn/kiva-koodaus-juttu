@@ -120,8 +120,8 @@ for i in range(1,1000):
         yellow_c.append(i)
     if i>200:
         purple_c.append(i)
-
-def waves(wave_points, h_v, c_v):
+res=1
+def waves(wave_points, h_v, c_v,res):
     i=0
     wave_list=[]
     start_x = curway[0][1] * 50 + 25
@@ -130,22 +130,22 @@ def waves(wave_points, h_v, c_v):
         ok=random.randint(1,20+h_v)
         i+=1
         if ok in red_c:
-            wave_list.append([red[0],red[1],red[2],[start_x,start_y],red_s,1,0,i])
+            wave_list.append([red[0],red[1],red[2]*red[1]*res,[start_x,start_y],red_s,1,0,i])
             wave_points-=red_p
         if ok in blue_c:
-            wave_list.append([blue[0],blue[1],blue[2],[start_x,start_y],blue_s,1,1,i])
+            wave_list.append([blue[0],blue[1],blue[2]*blue[1]*res,[start_x,start_y],blue_s,1,1,i])
             wave_points-=blue_p
         if ok in green_c:
-            wave_list.append([green[0],green[1],green[2],[start_x,start_y],green_s,1,2,i])
+            wave_list.append([green[0],green[1],green[2]*green[1]*res,[start_x,start_y],green_s,1,2,i])
             wave_points-=green_p
         if ok in yellow_c:
-            wave_list.append([yellow[0],yellow[1],yellow[2],[start_x,start_y],yellow_s,1,3,i])
+            wave_list.append([yellow[0],yellow[1],yellow[2]*yellow[1]*res,[start_x,start_y],yellow_s,1,3,i])
             wave_points-=yellow_p
         if ok in purple_c:
-            wave_list.append([purple[0],purple[1],purple[2],[start_x,start_y],purple_s,1,4,i])
+            wave_list.append([purple[0],purple[1],purple[2]*purple[1]*res,[start_x,start_y],purple_s,1,4,i])
             wave_points-=purple_p
         if ok > 1000:
-            wave_list.append([purple[0],purple[1],purple[2],[start_x,start_y],purple_s,1,5,1])
+            wave_list.append([purple[0],purple[1],purple[2]*purple[1]*res,[start_x,start_y],purple_s,1,5,1])
             wave_points-=purple_p
             
     return wave_list
@@ -721,10 +721,12 @@ while running and p_hp>0:
     
     if len(spawn_queue)==0 and len(active_enemies)==0:
         
-        spawn_queue=waves(wave_points, h_v, c_v)
+        spawn_queue=waves(wave_points, h_v, c_v,res)
         c_v+=1
-        h_v=h_v+c_v**3
+        h_v=h_v+c_v*3
         wave_points+=wave_points*0.1
+        if c_v>8:
+            res+=(1+c_v//6)
     
     current_time = pygame.time.get_ticks()
     if len(spawn_queue) > 0 and current_time - last_spawn_time >= SPAWN_DELAY:
