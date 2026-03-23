@@ -1003,7 +1003,7 @@ while running and p_hp>0:
         c_v+=1
         h_v=h_v+c_v*3
         wave_points+=wave_points*0.1
-        if c_v>8:
+        if c_v>20:
             res+=(1+c_v//20)
     
     current_time = pygame.time.get_ticks()
