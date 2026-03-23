@@ -216,7 +216,7 @@ for i in range(1,10000):
         purple_c.append(i)
     if i<700 and i>400:
         white_c.append(i)
-    if i<1300 and i>900:
+    if i<1300 and i>700:
         zebra_c.append(i)
     if i<1400 and i>1200:
         rainbow_c.append(i)
