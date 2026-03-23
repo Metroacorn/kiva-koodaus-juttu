@@ -427,8 +427,68 @@ def tack_shooterplaced():
         tack_shootershit.append(tack_shooterhit)
     for i in tack_shooters:
         pygame.draw.circle(screen,i[2],i[1],i[0])
+
+def tackshootershoot(i):
+     if tack_shootercooldowns[i]==0:
+         tack_shootercooldowns[i]=snipecooldown
+     else:
+         return
+         
+     x, y=tack_shootershootbox[i][1]
+         
+             
+     tackshoot(x,y)
+     
+def tackshoot(x,y):
+    rotation=0
+    tackring=[]
+    while rotation<360:
+        if rotation == 0:
+            dx=0
+            dy=-1
+            tackring.append([x,y,dx,dy,tackspeed,x,y])
+        elif rotation == 45:
+            dx=0.7071
+            dy=-0.7071
+            tackring.append([x,y,dx,dy,tackspeed,x,y])
+        elif rotation == 90:
+            dx=1
+            dy=0
+            tackring.append([x,y,dx,dy,tackspeed,x,y])
+        elif rotation == 135:
+            dx=0.7071
+            dy=0.7071
+            tackring.append([x,y,dx,dy,tackspeed,x,y])
+        elif rotation == 180:
+            dx=0
+            dy=1
+            tackring.append([x,y,dx,dy,tackspeed,x,y])
+        elif rotation == 225:
+            dx=-0.7071
+            dy=0.7071
+            tackring.append([x,y,dx,dy,tackspeed,x,y])
+        elif rotation == 270:
+            dx=-1
+            dy=0
+            tackring.append([x,y,dx,dy,tackspeed,x,y])
+        elif rotation == 315:
+            dx=-0.7071
+            dy=-0.7071
+            tackring.append([x,y,dx,dy,tackspeed,x,y])
+        rotation+=45
+    tacks.append(tackring)
+            
+def in_tack_circle(x,balloonpos):
+    Bx=balloonpos[0]
+    By=balloonpos[1]
     
-        
+
+    
+    r=x[0]
+    
+    Dx, Dy=x[1]
+    
+    return (Bx-Dx)**2 + (By-Dy)**2 <=r**2       
     
 def sniper_monkeyplace():
    screen.fill((255,255,255))
@@ -651,7 +711,9 @@ def draw_monkeys():
     
     
     #tackshooter
-
+    for n in range(len(tacks)):
+        for i in range(len(tacks[n])):
+            pygame.draw.circle(screen, (255,0,0), (int(tacks[n][i][0]), int(tacks[n][i][1])),5)  
 
     for i in tack_shooters:
         pygame.draw.circle(screen,i[2],i[1],i[0])
@@ -699,6 +761,7 @@ tack_shooters=[]
 tack_shootershit=[]
 tack_shootershootbox=[]
 tack_shootercooldowns=[]
+tacks=[]
 
 banana_farms=[]
 banana_farmshit=[]
@@ -764,10 +827,12 @@ tackcooldown=60
 
 dartdamage=1
 boomdamage=1
-snipedamage=5
+snipedamage=53
+tackdamage=1
 
 dartspeed=5
 boomerangspeed=5
+tackspeed=5
 sniperspeed=40
 
 banana_farmbought=False
@@ -1044,6 +1109,42 @@ while running and p_hp>0:
     if tackplaced:
         tack_shooterplaced()
         tackplaced=False
+      
+    for i in range(len(tack_shootercooldowns)):
+        if tack_shootercooldowns[i]>0:
+            tack_shootercooldowns[i]-=1
+    for i in range(len(tack_shootershootbox)):
+        for n in active_enemies:
+            if in_tack_circle(tack_shootershootbox[i],n[3]):
+                tackshootershoot(i)
+                break
+    for n in tacks:
+        for i in n:
+            i[0] += i[2] * i[4]
+            i[1] += i[3] * i[4]
+    for i in range(len(tacks)-1,-1,-1):
+        n=tacks[i]
+        dx=n[0][5]-n[0][0]
+        dy=n[0][6]-n[0][1]
+                
+        if dx**2 + dy**2 >= tackrange**2:
+            tacks.pop(i)
+    
+    
+    for n in active_enemies:
+        hit=pygame.Rect(0,0,50,50)
+        hit.center=(n[3])
+
+
+
+        for a in tacks[:]:
+            for i in a:
+                if hit.collidepoint(i[0],i[1]):
+                    n[2]-=tackdamage
+                    
+                
+
+    
     
     if sniper_monkeybought:
         if playarea.collidepoint(mousex,mousey):
