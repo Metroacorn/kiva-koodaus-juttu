@@ -1239,9 +1239,11 @@ while running and p_hp>0:
 
     for i in active_enemies:
         if i[2]<=0:
-            
-            ll=random.randint(1,c_v)
-            if ll==1:
+            if c_v>9:
+                ll=random.randint(1,c_v)
+                if ll==1:
+                    money+=1
+            else:
                 money+=1
             pop(i[6], i)
     if boomerang_monkeybought:
