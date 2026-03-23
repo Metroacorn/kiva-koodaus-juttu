@@ -975,7 +975,7 @@ tackcooldown=60
 
 dartdamage=1
 boomdamage=1
-snipedamage=53
+snipedamage=100
 tackdamage=1
 
 dartspeed=5
@@ -994,6 +994,8 @@ boomplaced=False
 dartplaced=False
 dart_monkeybought=False
 running = True
+
+
 
 while running and p_hp>0:
     
