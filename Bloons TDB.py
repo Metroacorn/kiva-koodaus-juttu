@@ -29,9 +29,14 @@ def pop(arvo, pallo):
                 offset = 30  
                 p2[0] += offset * dx / dist
                 p2[1] += offset * dy / dist
-
-        active_enemies.append([arvot[arvo][0], arvot[arvo][1], arvot[arvo][2], p1, pallo[4], pallo[5], pallo[6]-1, pallo[7]**4])
-        active_enemies.append([arvot[arvo][0], arvot[arvo][1], arvot[arvo][2], p2, pallo[4], pallo[5], pallo[6]-1, pallo[7]**3])
+        if arvo>=10:
+            for i in range(4):
+                active_enemies.append([arvot[arvo][0], arvot[arvo][1], arvot[arvo][2], p1, arvot[arvo-1][-1], pallo[5], pallo[6]-1, pallo[7]**i+2])
+        else:
+            active_enemies.append([arvot[arvo][0], arvot[arvo][1], arvot[arvo][2], p1, arvot[arvo-1][-1], pallo[5], pallo[6]-1, pallo[7]**4])
+            active_enemies.append([arvot[arvo][0], arvot[arvo][1], arvot[arvo][2], p2, arvot[arvo-1][-1], pallo[5], pallo[6]-1, pallo[7]**3])
+        
+        
 
 
 
@@ -51,25 +56,56 @@ blue_hp=1
 green_hp=1
 yellow_hp=1
 purple_hp=1
-p_hp=100000000000
+white_hp=1
+zebra_hp=1
+rainbow_hp=1
+rock_hp=5
+blue_moab_hp=100
+red_moab_hp=400
+green_moab_hp=2000
+
+
+p_hp=100
 #dmg
 red_dmg=1
 blue_dmg=2
 green_dmg=4
 yellow_dmg=8
 purple_dmg=16
+white_dmg=32
+zebra_dmg=64
+rainbow_dmg=128
+rock_dmg=256
+blue_moab_dmg=1024
+red_moab_dmg=4000
+green_moab_dmg=16000
+
 #points
 red_p=2
 blue_p=6
 green_p=9
 yellow_p=14
 purple_p=20
+white_p=28
+zebra_p=35
+rainbow_p=49
+rock_p=70
+blue_moab_p=130
+red_moab_p=200
+green_moab_p=300
 #speeds
 red_s=1
 blue_s=1.5
 green_s=1.7
 yellow_s=2.4
 purple_s=3
+white_s=3
+zebra_s=2.5
+rainbow_s=3
+rock_s=3
+blue_moab_s=2
+red_moab_s=1.4
+green_moab_s=1
 
 
 h_v=5
@@ -83,22 +119,68 @@ blue=[]
 blue.append((0, 0, 255))
 blue.append(blue_dmg)
 blue.append(blue_hp)
+blue.append(blue_s)
 green=[]
 green.append((0, 255, 0))
 green.append(green_dmg)
 green.append(green_hp)
+green.append(green_s)
 yellow=[]
 yellow.append((255, 255, 0))
 yellow.append(yellow_dmg)
 yellow.append(yellow_hp)
+yellow.append(yellow_s)
 purple=[]
 purple.append((128, 0, 128))
 purple.append(purple_dmg)
 purple.append(purple_hp)
-
+purple.append(purple_s)
 red.append((255, 0, 0))
 red.append(red_dmg)
 red.append(red_hp)
+red.append(red_s)
+white=[]
+white.append((255, 255, 255))
+white.append(white_dmg)
+white.append(white_hp)
+white.append(white_s)
+zebra=[]
+zebra.append((128, 128, 128))
+zebra.append(zebra_dmg)
+zebra.append(zebra_hp)
+zebra.append(zebra_s)
+rainbow=[]
+rainbow.append((0, 100, 0))
+rainbow.append(rainbow_dmg)
+rainbow.append(rainbow_hp)
+rainbow.append(rainbow_s)
+rock=[]
+rock.append((165, 42, 42))
+rock.append(rock_dmg)
+rock.append(rock_hp)
+rock.append(rock_s)
+blue_moab=[]
+blue_moab.append((0,0,255))
+blue_moab.append(blue_moab_dmg)
+blue_moab.append(blue_moab_hp)
+blue_moab.append(blue_moab_s)
+red_moab=[]
+red_moab.append((255,0,0))
+red_moab.append(red_moab_dmg)
+red_moab.append(red_moab_hp)
+red_moab.append(red_moab_s)
+green_moab=[]
+green_moab.append((0,255,0))
+green_moab.append(green_moab_dmg)
+green_moab.append(green_moab_hp)
+green_moab.append(green_moab_s)
+
+
+
+
+
+
+
 
 
 
@@ -108,8 +190,20 @@ green_c=[]
 yellow_c=[]
 purple_c=[]
 
+white_c=[]
+zebra_c=[]
+rainbow_c=[]
+rock_c=[]
 
-for i in range(1,1000):
+blue_moad_c=[]
+red_moab_c=[]
+green_moab_c=[]
+
+
+
+
+
+for i in range(1,10000):
     if i<35:
         red_c.append(i)
     if i<70 and i>20:
@@ -118,36 +212,86 @@ for i in range(1,1000):
         green_c.append(i)
     if i<230 and i>100:
         yellow_c.append(i)
-    if i>200:
+    if i<500 and i>200:
         purple_c.append(i)
-res=1
-def waves(wave_points, h_v, c_v,res):
-    i=0
-    wave_list=[]
+    if i<700 and i>400:
+        white_c.append(i)
+    if i<1300 and i>900:
+        zebra_c.append(i)
+    if i<1400 and i>1200:
+        rainbow_c.append(i)
+    if i<2000 and i>1400:
+        rock_c.append(i)
+    if i<2200 and i>2000:
+        blue_moad_c.append(i)
+    if i<3000 and i>2200:
+        red_moab_c.append(i)
+    if i>3000:
+        green_moab_c.append(i)
+        
+res = 1
+
+def waves(wave_points, h_v, c_v, res):
+    i = 0
+    wave_list = []
     start_x = curway[0][1] * 50 + 25
     start_y = curway[0][0] * 50 + 25
-    while wave_points>2:
-        ok=random.randint(1,20+h_v)
-        i+=1
+
+    while wave_points > 2:
+        ok = random.randint(1, 20 + h_v)
+        i += 1
+
         if ok in red_c:
-            wave_list.append([red[0],red[1],red[2]*red[1]*res,[start_x,start_y],red_s,1,0,i])
-            wave_points-=red_p
+            wave_list.append([red[0], red[1], red[2], [start_x, start_y], red_s, 1, 0, i])
+            wave_points -= red_p
+
         if ok in blue_c:
-            wave_list.append([blue[0],blue[1],blue[2]*blue[1]*res,[start_x,start_y],blue_s,1,1,i])
-            wave_points-=blue_p
+            wave_list.append([blue[0], blue[1], blue[2], [start_x, start_y], blue_s, 1, 1, i])
+            wave_points -= blue_p
+
         if ok in green_c:
-            wave_list.append([green[0],green[1],green[2]*green[1]*res,[start_x,start_y],green_s,1,2,i])
-            wave_points-=green_p
+            wave_list.append([green[0], green[1], green[2], [start_x, start_y], green_s, 1, 2, i])
+            wave_points -= green_p
+
         if ok in yellow_c:
-            wave_list.append([yellow[0],yellow[1],yellow[2]*yellow[1]*res,[start_x,start_y],yellow_s,1,3,i])
-            wave_points-=yellow_p
+            wave_list.append([yellow[0], yellow[1], yellow[2], [start_x, start_y], yellow_s, 1, 3, i])
+            wave_points -= yellow_p
+
         if ok in purple_c:
-            wave_list.append([purple[0],purple[1],purple[2]*purple[1]*res,[start_x,start_y],purple_s,1,4,i])
-            wave_points-=purple_p
-        if ok > 1000:
-            wave_list.append([purple[0],purple[1],purple[2]*purple[1]*res,[start_x,start_y],purple_s,1,5,1])
-            wave_points-=purple_p
-            
+            wave_list.append([purple[0], purple[1], purple[2], [start_x, start_y], purple_s, 1, 4, i])
+            wave_points -= purple_p
+
+        if ok in white_c:
+            wave_list.append([white[0], white[1], white[2], [start_x, start_y], white_s, 1, 5, i])
+            wave_points -= white_p
+
+        if ok in zebra_c:
+            wave_list.append([zebra[0], zebra[1], zebra[2], [start_x, start_y], zebra_s, 1, 6, i])
+            wave_points -= zebra_p
+
+        if ok in rainbow_c:
+            wave_list.append([rainbow[0], rainbow[1], rainbow[2], [start_x, start_y], rainbow_s, 1, 7, i])
+            wave_points -= rainbow_p
+
+        if ok in rock_c:
+            wave_list.append([rock[0], rock[1], rock[2]*res, [start_x, start_y], rock_s, 1, 8, i])
+            wave_points -= rock_p
+
+        if ok in blue_moad_c:
+            wave_list.append([blue_moab[0], blue_moab[1], blue_moab[2]*res, [start_x, start_y], blue_moab_s, 1, 9, i])
+            wave_points -= blue_moab_p
+
+        if ok in red_moab_c:
+            wave_list.append([red_moab[0], red_moab[1], red_moab[2]*res, [start_x, start_y], red_moab_s, 1, 10, i])
+            wave_points -= red_moab_p
+
+        if ok in green_moab_c:
+            wave_list.append([green_moab[0], green_moab[1], green_moab[2]*res, [start_x, start_y], green_moab_s, 1, 11, i])
+            wave_points -= green_moab_p
+        if ok>5000:
+            wave_list.append([green_moab[0], green_moab[1], green_moab[2]*res, [start_x, start_y], green_moab_s, 1, 11, i])
+            wave_points -= green_moab_p
+
     return wave_list
             
     
@@ -236,12 +380,14 @@ def polku():
 
 curway=polku()
 screen.fill((255, 255, 255))
-arvot=[red,blue,green,yellow,purple]
+
 clump=True
 dur=3000
 oko=0
 m=0
 cooldown=40000
+arvot=[red,blue,green,yellow,purple,white,zebra,rainbow,rock,blue_moab,red_moab,green_moab]
+
 def background():
     pygame.draw.rect(screen,(139, 69, 19),shop)    
     pygame.draw.rect(screen,(0,255,0),dart_monkeyshop)
@@ -858,7 +1004,7 @@ while running and p_hp>0:
         h_v=h_v+c_v*3
         wave_points+=wave_points*0.1
         if c_v>8:
-            res+=(1+c_v//6)
+            res+=(1+c_v//20)
     
     current_time = pygame.time.get_ticks()
     if len(spawn_queue) > 0 and current_time - last_spawn_time >= SPAWN_DELAY:
@@ -1209,9 +1355,15 @@ while running and p_hp>0:
         pygame.draw.rect(screen, (200, 211, 0), rect, 1)    
 
     for i in active_enemies:
-        pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 20)
-    
-    # Movement system
+        if i[6]<9:
+            pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 20)
+        if i[6]==10:
+            pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 35)
+        if i[6]==11:
+            pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 45)
+        if i[6]==12:
+            pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 60)
+     
     for enemy in active_enemies[:]:
         if enemy[5] >= len(curway):
             p_hp -= enemy[1]
