@@ -47,8 +47,11 @@ def pop(arvo, pallo):
 pygame.display.set_caption("Bloons TD")
 screen = pygame.display.set_mode((1000,600))
 dart_monkey_shop_icon=pygame.image.load("Dart_monkey_shop_icon.png")
-
-
+boomerang_monkey_shop_icon=pygame.image.load("boomerang_monkey_shop_icon.png")
+tack_shooter_shop_icon=pygame.image.load("tack_shooter_shop_icon.png")
+banana_farm_shop_icon=pygame.image.load("banana_farm_shop_icon.png")
+sniper_monkey_shop_icon=pygame.image.load("sniper_monkey_shop_icon.png")
+tack_shooter_model=pygame.image.load("tack_shooter.png")
 
 clock = pygame.time.Clock()
 grid = [[0 for _ in range(14)] for _ in range(12)]
@@ -395,15 +398,24 @@ arvot=[red,blue,green,yellow,purple,white,zebra,rainbow,rock,blue_moab,red_moab,
 def background():
     pygame.draw.rect(screen,(139, 69, 19),shop)    
     screen.blit(dart_monkey_shop_icon,(dart_monkeyshop))
-    pygame.draw.rect(screen,(0,255,0),tack_shootershop)
-    pygame.draw.rect(screen,(0,255,0),boomerang_monkeyshop)
-    pygame.draw.rect(screen,(0,255,0),banana_farmshop)
-    pygame.draw.rect(screen,(0,255,0),sniper_monkeyshop)
+    screen.blit(tack_shooter_shop_icon,(tack_shootershop))
+    screen.blit(boomerang_monkey_shop_icon,(boomerang_monkeyshop))
+    screen.blit(banana_farm_shop_icon,(banana_farmshop))
+    screen.blit(sniper_monkey_shop_icon,(sniper_monkeyshop))
     
     moneytext=font.render(f"Money:{money}",True,(0,0,0))
+    darttext=font.render(f"{dartcost}",True,(0,0,0))
+    boomtext=font.render(f"{boomcost}",True,(0,0,0))
+    tacktext=font.render(f"{tackcost}",True,(0,0,0))
+    bananatext=font.render(f"{bananacost}",True,(0,0,0))
+    snipertext=font.render(f"{snipercost}",True,(0,0,0))
     
     screen.blit(moneytext,(10,10))
-
+    screen.blit(darttext,(775,150))
+    screen.blit(tacktext,(775,250))
+    screen.blit(boomtext,(775,350))
+    screen.blit(bananatext,(875,150))
+    screen.blit(snipertext,(875,250))
     
 def dart_monkeyplace():
     screen.fill((255,255,255))
@@ -551,11 +563,11 @@ def tack_shooterplace():
     
     
     for i in tack_shooters:
-        pygame.draw.circle(screen,i[2],i[1],i[0])
+        screen.blit(tack_shooter_model,(i[1][0]-25,i[1][1]-25))
     
     
-    
-    pygame.draw.circle(screen,(0,0,0),(tackx,tacky),25)
+    screen.blit(tack_shooter_model,(tackx-25,tacky-25))
+
     
     tack_shooterhit=pygame.Rect(0,0,45,45)
     tack_shooterhit.center=(tackx,tacky)
@@ -575,8 +587,9 @@ def tack_shooterplaced():
         tack_shooterhit=pygame.Rect(0,0,45,45)
         tack_shooterhit.center=(tackstayx,tackstayy)
         tack_shootershit.append(tack_shooterhit)
+    
     for i in tack_shooters:
-        pygame.draw.circle(screen,i[2],i[1],i[0])
+        screen.blit(tack_shooter_model,(i[1][0]-25,i[1][1]-25))
 
 def tackshootershoot(i):
      if tack_shootercooldowns[i]==0:
@@ -860,13 +873,14 @@ def draw_monkeys():
         pygame.draw.circle(screen, (255,0,0), (int(boomerang[0]), int(boomerang[1])),5)
     
     
-    #tackshooter
-    for n in range(len(tacks)):
-        for i in range(len(tacks[n])):
-            pygame.draw.circle(screen, (255,0,0), (int(tacks[n][i][0]), int(tacks[n][i][1])),5)  
+    #tackshooter 
 
     for i in tack_shooters:
-        pygame.draw.circle(screen,i[2],i[1],i[0])
+        screen.blit(tack_shooter_model,(i[1][0]-25,i[1][1]-25))
+    
+    for n in range(len(tacks)):
+        for i in range(len(tacks[n])):
+            pygame.draw.circle(screen, (255,0,0), (int(tacks[n][i][0]), int(tacks[n][i][1])),5) 
     
     
     #snipermonkey
