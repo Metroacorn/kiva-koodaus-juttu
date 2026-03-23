@@ -51,7 +51,7 @@ blue_hp=1
 green_hp=1
 yellow_hp=1
 purple_hp=1
-p_hp=100
+p_hp=100000000000
 #dmg
 red_dmg=1
 blue_dmg=2
@@ -360,9 +360,10 @@ def boomerangshoot(x,y,balloonx,balloony):
         dx /= distance
         dy /= distance
     
-    speed=5
+    speed=boomerangspeed
     
-    boomerangs.append([x,y,dx,dy,speed])
+    boomerangs.append([x,y,dx,dy,speed,x,y])
+    comingback.append(False)
     
 def in_boomerang_circle(x,balloonpos):
     Bx=balloonpos[0]
@@ -375,6 +376,19 @@ def in_boomerang_circle(x,balloonpos):
     Dx, Dy=x[1]
     
     return (Bx-Dx)**2 + (By-Dy)**2 <=r**2
+
+def boomerangmax(i):
+    boomx=boomerangs[i][5]
+    boomy=boomerangs[i][6]
+    x=boomerangs[i][0]
+    y=boomerangs[i][1]
+    
+    dx=x-boomx
+    dy=y-boomy
+    
+    distance=math.sqrt(dx**2+dy**2)
+    
+    return distance
 
 def tack_shooterplace():
     screen.fill((255,255,255))
@@ -456,6 +470,49 @@ def sniper_monkeyplaced():
   
    
     pygame.draw.rect(screen,(255,0,0),sniper_monkeyhit) 
+
+def sniper_monkeyshoot(i,balloonpos):
+    
+
+    if sniper_monkeycooldowns[i]==0:
+        sniper_monkeycooldowns[i]=snipecooldown
+    else:
+        return
+        
+    x, y=sniper_monkeyshootbox[i][1]
+    balloonx=balloonpos[0]
+    balloony=balloonpos[1]
+        
+            
+    snipebullet(x,y,balloonx,balloony)
+
+
+def snipebullet(x,y,balloonx,balloony):
+    dx=balloonx-x
+    dy=balloony-y
+    
+    distance=math.sqrt(dx**2+dy**2)
+    
+    if distance !=0:
+        dx /= distance
+        dy /= distance
+    
+    speed=sniperspeed
+    
+    snipeds.append([x,y,dx,dy,speed])
+
+def in_snipe_circle(x,balloonpos):
+
+    Bx=balloonpos[0]
+    By=balloonpos[1]
+    
+
+    
+    r=x[0]
+    
+    Dx, Dy=x[1]
+    
+    return (Bx-Dx)**2 + (By-Dy)**2 <=r**2
 
 def banana_farmplace():
     screen.fill((255,255,255))
@@ -547,7 +604,7 @@ def dartbullet(x,y,balloonx,balloony):
         dx /= distance
         dy /= distance
     
-    speed=5
+    speed=dartspeed
     
     darts.append([x,y,dx,dy,speed])
 
@@ -605,6 +662,8 @@ def draw_monkeys():
     for i in sniper_monkeys:
         pygame.draw.circle(screen,i[2],i[1],i[0])
       
+    for i in range(len(snipeds)):
+        pygame.draw.circle(screen, (255,0,0), (int(snipeds[i][0]), int(snipeds[i][1])),5)    
     
     #bananafarm
 
@@ -633,6 +692,8 @@ boomerang_monkeyshootbox=[]
 boomerang_monkeycooldowns=[]
 boomerangs=[]
 boomerangdistance=[]
+comingback=[]
+boomdistance=[]
 
 tack_shooters=[]
 tack_shootershit=[]
@@ -650,6 +711,7 @@ sniper_monkeys=[]
 sniper_monkeyshit=[]
 sniper_monkeyshootbox=[]
 sniper_monkeycooldowns=[]
+snipeds=[]
 
 dart_monkeyhit=pygame.Rect(0,0,25,25)
 
@@ -680,7 +742,7 @@ shop=pygame.Rect(700,0,300,600)
 
 pygame.display.update()
 
-money=250
+money=999999999
 
 dartrange=125
 boomrange=150
@@ -702,6 +764,11 @@ tackcooldown=60
 
 dartdamage=1
 boomdamage=1
+snipedamage=5
+
+dartspeed=5
+boomerangspeed=5
+sniperspeed=40
 
 banana_farmbought=False
 bananaplaced=False
@@ -929,14 +996,33 @@ while running and p_hp>0:
             if in_dart_circle(boomerang_monkeyshootbox[i],n[3]):
                 boomerang_monkeyshoot(i,n[3])
                 break
-    for boomerang in boomerangs:
-        boomerang[0] += boomerang[2] * boomerang[4]
-        boomerang[1] += boomerang[3] * boomerang[4]
+    
+    for i in range(len(boomerangs)-1,-1,-1):
+        if boomerangs[i][0]==boomerangs[i][5]:
+            if boomerangs[i][1]==boomerangs[i][6]:
+                if comingback[i]:
+                    boomerangs.pop(i)
+                    comingback.pop(i)
+            
+    for i in range(len(comingback)):
+        if not comingback[i]:
+            boomerangs[i][0] += boomerangs[i][2] * boomerangs[i][4]
+            boomerangs[i][1] += boomerangs[i][3] * boomerangs[i][4]
+        else:
+            boomerangs[i][0] -= boomerangs[i][2] * boomerangs[i][4]
+            boomerangs[i][1] -= boomerangs[i][3] * boomerangs[i][4]
         
-    for boomerang in boomerangs:
-        if boomerang[0]>1000 or boomerang[0]<0:
-            if boomerang[1]>600 or boomerang[1]<0:
-                boomerangs.remove(boomerang)
+        
+    for i in range(len(comingback)):
+        if boomerangmax(i)>boomrange:
+            comingback.pop(i)
+            comingback.insert(i,True)
+    
+    for i in range(len(boomerangs)-1,-1,-1):
+        if boomerangs[i][0]>1000 or boomerangs[i][0]<0:
+            if boomerangs[i][1]>600 or boomerangs[i][1]<0:
+                boomerangs.pop(i)
+                comingback.pop(i)
             
     
 
@@ -966,6 +1052,41 @@ while running and p_hp>0:
     if sniperplaced:
         sniper_monkeyplaced()
         sniperplaced=False
+    
+    for i in range(len(sniper_monkeycooldowns)):
+        if sniper_monkeycooldowns[i]>0:
+            sniper_monkeycooldowns[i]-=1
+    for i in range(len(sniper_monkeyshootbox)):
+        for n in active_enemies:
+            if in_snipe_circle(sniper_monkeyshootbox[i],n[3]):
+                sniper_monkeyshoot(i,n[3])
+                break
+    
+            
+    
+    
+    for i in snipeds:
+        i[0] += i[2] * i[4]
+        i[1] += i[3] * i[4]
+        
+    for i in snipeds:
+        if i[0]>1000 or i[0]<0:
+            if i[1]>600 or i[1]<0:
+                snipeds.remove(i)
+            
+    
+
+    for n in active_enemies:
+        hit=pygame.Rect(0,0,50,50)
+        hit.center=(n[3])
+
+
+
+        for i in snipeds[:]:
+            if hit.collidepoint(i[0],i[1]):
+                n[2]-=snipedamage
+                snipeds.remove(i)
+                break
     
     if banana_farmbought:
         if playarea.collidepoint(mousex, mousey):
