@@ -1221,7 +1221,10 @@ while running and p_hp>0:
 
     for i in active_enemies:
         if i[2]<=0:
-            money+=1
+            
+            ll=random.randint(1,c_v)
+            if ll==1:
+                money+=1
             pop(i[6], i)
     if boomerang_monkeybought:
         if playarea.collidepoint(mousex,mousey):
