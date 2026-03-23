@@ -922,6 +922,8 @@ sniper_monkeyshootbox=[]
 sniper_monkeycooldowns=[]
 snipeds=[]
 
+allhitboxes=[]
+
 dart_monkeyhit=pygame.Rect(0,0,25,25)
 
 
@@ -994,6 +996,14 @@ dart_monkeybought=False
 running = True
 
 while running and p_hp>0:
+    
+    allhitboxes.clear()
+    allhitboxes.append(dart_monkeyshit)
+    allhitboxes.append(boomerang_monkeyhit)
+    allhitboxes.append(sniper_monkeyshit)
+    allhitboxes.append(tack_shootershit)
+    allhitboxes.append(banana_farmshit)
+    
     screen.fill((255,255,255))
     clock.tick(60)
     
@@ -1053,6 +1063,10 @@ while running and p_hp>0:
             for i in curway:
                 if mousey//50==i[0] and mousex//50==i[1]:
                     dartoverlap=True
+            for i in allhitboxes:
+                for n in i:
+                    if n.collidepoint(event.pos):
+                        dartoverlap=True
             if not dartoverlap:    
                 dart_monkeybought=False
                 dartstayx, dartstayy=pygame.mouse.get_pos()
@@ -1069,7 +1083,10 @@ while running and p_hp>0:
             for i in curway:
                 if mousey//50==i[0] and mousex//50==i[1]:
                     boomoverlap=True
-                
+            for i in allhitboxes:
+                for n in i:
+                    if n.collidepoint(event.pos):
+                        boomoverlap=True
             if not boomoverlap:
                 boomerang_monkeybought=False
                 boomstayx, boomstayy=pygame.mouse.get_pos()
@@ -1089,7 +1106,10 @@ while running and p_hp>0:
             for i in curway:
                 if mousey//50==i[0] and mousex//50==i[1]:
                     tackoverlap=True
-                
+            for i in allhitboxes:
+                for n in i:
+                    if n.collidepoint(event.pos):
+                        tackoverlap=True  
             if not tackoverlap:
                 tack_shooterbought=False
                 tackstayx, tackstayy=pygame.mouse.get_pos()
@@ -1109,6 +1129,11 @@ while running and p_hp>0:
                 if mousey//50==i[0] and mousex//50==i[1]:
                     snipeoverlap=True
             
+            for i in allhitboxes:
+                for n in i:
+                    if n.collidepoint(event.pos):
+                        snipeoverlap=True
+            
             if not snipeoverlap:
                 sniper_monkeybought=False
                 snipestayx, snipestayy=pygame.mouse.get_pos()
@@ -1124,6 +1149,11 @@ while running and p_hp>0:
             for i in curway:
                 if mousey//50==i[0] and mousex//50 == i[1]:
                     bananaoverlap=True
+            
+            for i in allhitboxes:
+                for n in i:
+                    if n.collidepoint(event.pos):
+                        bananaoverlap=True
             
             if not bananaoverlap:
                 banana_farmbought=False
