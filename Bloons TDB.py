@@ -46,6 +46,10 @@ def pop(arvo, pallo):
 
 pygame.display.set_caption("Bloons TD")
 screen = pygame.display.set_mode((1000,600))
+dart_monkey_shop_icon=pygame.image.load("Dart_monkey_shop_icon.png")
+
+
+
 clock = pygame.time.Clock()
 grid = [[0 for _ in range(14)] for _ in range(12)]
 c_v=0
@@ -390,7 +394,7 @@ arvot=[red,blue,green,yellow,purple,white,zebra,rainbow,rock,blue_moab,red_moab,
 
 def background():
     pygame.draw.rect(screen,(139, 69, 19),shop)    
-    pygame.draw.rect(screen,(0,255,0),dart_monkeyshop)
+    screen.blit(dart_monkey_shop_icon,(dart_monkeyshop))
     pygame.draw.rect(screen,(0,255,0),tack_shootershop)
     pygame.draw.rect(screen,(0,255,0),boomerang_monkeyshop)
     pygame.draw.rect(screen,(0,255,0),banana_farmshop)
