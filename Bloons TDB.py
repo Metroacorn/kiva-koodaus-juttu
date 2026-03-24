@@ -52,6 +52,10 @@ tack_shooter_shop_icon=pygame.image.load("tack_shooter_shop_icon.png")
 banana_farm_shop_icon=pygame.image.load("banana_farm_shop_icon.png")
 sniper_monkey_shop_icon=pygame.image.load("sniper_monkey_shop_icon.png")
 tack_shooter_model=pygame.image.load("tack_shooter.png")
+banana_farm_model=pygame.image.load("banana_farm_model.png")
+dart_monkey_model=pygame.image.load("dart_monkey_model.png")
+boomerang_monkey_model=pygame.image.load("boomerang_monkey_model.png")
+sniper_monkey_model=pygame.image.load("sniper_monkey_model.png")
 
 clock = pygame.time.Clock()
 grid = [[0 for _ in range(14)] for _ in range(12)]
@@ -428,11 +432,11 @@ def dart_monkeyplace():
     
     
     for i in dart_monkeys:
-        pygame.draw.circle(screen,i[2],i[1],i[0])
+        screen.blit(dart_monkey_model,(i[1][0]-25,i[1][1]-25))
     
     
-    
-    pygame.draw.circle(screen,(0,0,0),(dartx,darty),25)
+    screen.blit(dart_monkey_model,(dartx-25,darty-25))
+
     
     dart_monkeyhit=pygame.Rect(0,0,45,45)
     dart_monkeyhit.center=(dartx,darty)
@@ -453,7 +457,7 @@ def dart_monkeyplaced():
         dart_monkeyhit.center=(dartstayx,dartstayy)
         dart_monkeyshit.append(dart_monkeyhit)
     for i in dart_monkeys:
-        pygame.draw.circle(screen,i[2],i[1],i[0])
+        screen.blit(dart_monkey_model,(i[1][0]-25,i[1][1]-25))
     
         
     
@@ -469,9 +473,9 @@ def boomerang_monkeyplace():
     pygame.draw.circle(screen,(211,211,211),(boomx,boomy),boomrange)
     
     for i in boomerang_monkeys:
-        pygame.draw.circle(screen,i[2],i[1],i[0])
+        screen.blit(boomerang_monkey_model,(i[1][0]-25,i[1][1]-25))
     
-    pygame.draw.circle(screen,(0,0,0),(boomx,boomy),25)
+    screen.blit(boomerang_monkey_model,(boomx-25,boomy-25))
     
     boomhit=pygame.Rect(0,0,45,45)
     boomhit.center=(boomx,boomy)
@@ -496,7 +500,7 @@ def boomerang_monkeyplaced():
         boomerang_monkeyhit.append(boomerang_monkeyshit)
     
     for i in boomerang_monkeys:
-        pygame.draw.circle(screen,i[2],i[1],i[0])
+        screen.blit(boomerang_monkey_model,(i[1][0]-25,i[1][1]-25))
 
 def boomerang_monkeyshoot(i,balloonpos):
     if boomerang_monkeycooldowns[i]==0:
@@ -664,11 +668,11 @@ def sniper_monkeyplace():
     
     
    for i in sniper_monkeys:
-       pygame.draw.circle(screen,i[2],i[1],i[0])
+       screen.blit(sniper_monkey_model,(i[1][0]-25,i[1][1]-25))
     
     
     
-   pygame.draw.circle(screen,(0,0,0),(snipex,snipey),25)
+   screen.blit(sniper_monkey_model,(snipex-25,snipey-25))
     
    sniper_monkeyhit=pygame.Rect(0,0,45,45)
    sniper_monkeyhit.center=(snipex,snipey)
@@ -689,10 +693,10 @@ def sniper_monkeyplaced():
         sniper_monkeyhit.center=(snipestayx,snipestayy)
         sniper_monkeyshit.append(sniper_monkeyhit)
     for i in sniper_monkeys:
-        pygame.draw.circle(screen,i[2],i[1],i[0])
+        screen.blit(sniper_monkey_model,(i[1][0]-25,i[1][1]-25))
   
    
-    pygame.draw.rect(screen,(255,0,0),sniper_monkeyhit) 
+
 
 def sniper_monkeyshoot(i,balloonpos):
     
@@ -748,11 +752,11 @@ def banana_farmplace():
      
      
     for i in banana_farms:
-        pygame.draw.circle(screen,i[2],i[1],i[0])
+        screen.blit(banana_farm_model,(i[1][0]-25,i[1][1]-25))
      
      
-     
-    pygame.draw.circle(screen,(0,0,0),(bananax,bananay),25)
+    screen.blit(banana_farm_model,(bananax-25,bananay-25))
+
      
     banana_farmhit=pygame.Rect(0,0,45,45)
     banana_farmhit.center=(bananax,bananay)
@@ -773,7 +777,7 @@ def banana_farmplaced():
          banana_farmhit.center=(bananastayx,bananastayy)
          banana_farmshit.append(banana_farmhit)
      for i in banana_farms:
-         pygame.draw.circle(screen,i[2],i[1],i[0])
+         screen.blit(banana_farm_model,(i[1][0]-25,i[1][1]-25))
       
     
 
@@ -857,7 +861,7 @@ def draw_monkeys():
     #dartmonkey
 
     for i in dart_monkeys:
-        pygame.draw.circle(screen,i[2],i[1],i[0])
+        screen.blit(dart_monkey_model,(i[1][0]-25,i[1][1]-25))
 
         
     for i in range(len(darts)):
@@ -867,7 +871,7 @@ def draw_monkeys():
 
     
     for i in boomerang_monkeys:
-        pygame.draw.circle(screen,i[2],i[1],i[0])
+        screen.blit(boomerang_monkey_model,(i[1][0]-25,i[1][1]-25))
     
     for i in range(len(boomerangs)):
         pygame.draw.circle(screen, (255,0,0), (int(boomerang[0]), int(boomerang[1])),5)
@@ -886,7 +890,7 @@ def draw_monkeys():
     #snipermonkey
 
     for i in sniper_monkeys:
-        pygame.draw.circle(screen,i[2],i[1],i[0])
+        screen.blit(sniper_monkey_model,(i[1][0]-25,i[1][1]-25))
       
     for i in range(len(snipeds)):
         pygame.draw.circle(screen, (255,0,0), (int(snipeds[i][0]), int(snipeds[i][1])),5)    
@@ -894,7 +898,7 @@ def draw_monkeys():
     #bananafarm
 
     for i in banana_farms:
-        pygame.draw.circle(screen,i[2],i[1],i[0])
+        screen.blit(banana_farm_model,(i[1][0]-25,i[1][1]-25))
      
     
     for i in bananas:
@@ -933,6 +937,7 @@ banana_farmshootbox=[]
 banana_farmcooldowns=[]
 bananas=[]
 bananashit=[]
+
 
 sniper_monkeys=[]
 sniper_monkeyshit=[]
@@ -1181,13 +1186,15 @@ while running and p_hp>0:
                 bananaplaced=True
         
         if event.type == pygame.MOUSEBUTTONDOWN:
-            for i in range(len(bananashit)):
-                if bananashit[i-1].collidepoint(event.pos):
-                    bananashit.pop(i-1)
-                    bananas.pop(i-1)
-                    money+=10
+            for i in range(len(bananashit)-1,-1,-1):
+                if bananashit[i].collidepoint(event.pos):
+                    bananashit.pop(i)
+                    bananas.pop(i)
                     
-        
+                    money+=10
+         
+    
+            
             
     mousex, mousey=pygame.mouse.get_pos()
     
