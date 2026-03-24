@@ -8,7 +8,7 @@ pygame.init()
 
 
 
-def pop(arvo, pallo):
+def pop(arvo, pallo,ct):
     if arvo == 0:
         active_enemies.remove(pallo)
     else:
@@ -29,12 +29,15 @@ def pop(arvo, pallo):
                 offset = 30  
                 p2[0] += offset * dx / dist
                 p2[1] += offset * dy / dist
+        
+        
+        
         if arvo>=10:
             for i in range(4):
-                active_enemies.append([arvot[arvo][0], arvot[arvo][1], arvot[arvo][2], p1, arvot[arvo-1][-1], pallo[5], pallo[6]-1, pallo[7]**i+2])
+                active_enemies.append([arvot[arvo][0], arvot[arvo][1], arvot[arvo][2], p1, arvot[arvo-1][-1], pallo[5], pallo[6]-1, pallo[7]**i+2,ct])
         else:
-            active_enemies.append([arvot[arvo][0], arvot[arvo][1], arvot[arvo][2], p1, arvot[arvo-1][-1], pallo[5], pallo[6]-1, pallo[7]**4])
-            active_enemies.append([arvot[arvo][0], arvot[arvo][1], arvot[arvo][2], p2, arvot[arvo-1][-1], pallo[5], pallo[6]-1, pallo[7]**3])
+            active_enemies.append([arvot[arvo][0], arvot[arvo][1], arvot[arvo][2], p1, arvot[arvo-1][-1], pallo[5], pallo[6]-1, pallo[7]**4,ct])
+            active_enemies.append([arvot[arvo][0], arvot[arvo][1], arvot[arvo][2], p2, arvot[arvo-1][-1], pallo[5], pallo[6]-1, pallo[7]**3,ct])
         
         
 
@@ -1328,13 +1331,16 @@ while running and p_hp>0:
 
     for i in active_enemies:
         if i[2]<=0:
+            
+            
             if c_v>9:
                 ll=random.randint(1,c_v)
                 if ll==1:
                     money+=1
             else:
                 money+=1
-            pop(i[6], i)
+            mo=pygame.time.get_ticks()
+            pop(i[6], i,mo)
     if boomerang_monkeybought:
         if playarea.collidepoint(mousex,mousey):
             boomerang_monkeyplace()
@@ -1387,9 +1393,11 @@ while running and p_hp>0:
 
 
 
-        for boomerang in boomerangs[:]:
+       for boomerang in boomerangs[:]:
             if hit.collidepoint(boomerang[0],boomerang[1]):
-                i[2]-=boomdamage
+                ct=pygame.time.get_ticks()
+                if ct-i[8]>200:
+                    i[2]-=boomdamage
                 
             
     
@@ -1430,8 +1438,9 @@ while running and p_hp>0:
         for a in tacks[:]:
             for i in a:
                 if hit.collidepoint(i[0],i[1]):
-                    n[2]-=tackdamage
-                    
+                    ct=pygame.time.get_ticks()
+                    if ct-n[8]>150:
+                        n[2]-=tackdamage 
                 
 
     
