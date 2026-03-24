@@ -404,6 +404,10 @@ m=0
 cooldown=40000
 arvot=[red,blue,green,yellow,purple,white,zebra,rainbow,rock,blue_moab,red_moab,green_moab]
 
+def menu():
+    screen.fill((0,255,0))
+    
+
 def background():
     pygame.draw.rect(screen,(139, 69, 19),shop)    
     screen.blit(dart_monkey_shop_icon,(dart_monkeyshop))
@@ -1014,6 +1018,7 @@ boomerang_monkeyshop=pygame.Rect(0,0,50,50)
 banana_farmshop=pygame.Rect(0,0,50,50)
 sniper_monkeyshop=pygame.Rect(0,0,50,50)
 spike_factoryshop=pygame.Rect(0,0,50,50)
+start_button=pygame.Rect(0,0,500,100)
 
 dart_monkeyshop.center=(800,125)
 tack_shootershop.center=(800,225)
@@ -1021,6 +1026,7 @@ boomerang_monkeyshop.center=(800,325)
 banana_farmshop.center=(900,125)
 sniper_monkeyshop.center=(900,225)
 spike_factoryshop.center=(900,325)
+start_button.center=(500,300)
 
 playarea=pygame.Rect(0,0,700,600)
 spawn_queue=[]    
@@ -1083,10 +1089,14 @@ dart_monkeybought=False
 spikeplaced=False
 spike_factorybought=False
 running = True
+menuon=False
 
 
 
-while running and p_hp>0:
+while running:
+    
+    if p_hp<0:
+        menuon=True
     
     allhitboxes.clear()
     allhitboxes.append(dart_monkeyshit)
@@ -1393,11 +1403,11 @@ while running and p_hp>0:
 
 
 
-       for boomerang in boomerangs[:]:
-            if hit.collidepoint(boomerang[0],boomerang[1]):
-                ct=pygame.time.get_ticks()
-                if ct-i[8]>200:
-                    i[2]-=boomdamage
+    for boomerang in boomerangs[:]:
+        if hit.collidepoint(boomerang[0],boomerang[1]):
+            ct=pygame.time.get_ticks()
+            if ct-i[8]>200:
+                i[2]-=boomdamage
                 
             
     
@@ -1558,6 +1568,8 @@ while running and p_hp>0:
     screen.blit(wave_text, (590, 10))
     screen.blit(hp_text, (500, 10))      
     background()
+    if menuon:
+        menu()
     pygame.display.update()
 
 
