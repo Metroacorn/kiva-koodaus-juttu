@@ -56,6 +56,8 @@ banana_farm_model=pygame.image.load("banana_farm_model.png")
 dart_monkey_model=pygame.image.load("dart_monkey_model.png")
 boomerang_monkey_model=pygame.image.load("boomerang_monkey_model.png")
 sniper_monkey_model=pygame.image.load("sniper_monkey_model.png")
+spike_factory_model=pygame.image.load("spike_factory_model.png")
+spike_factory_shop_icon=pygame.image.load("spike_factory_shop_icon.png")
 
 clock = pygame.time.Clock()
 grid = [[0 for _ in range(14)] for _ in range(12)]
@@ -406,6 +408,7 @@ def background():
     screen.blit(boomerang_monkey_shop_icon,(boomerang_monkeyshop))
     screen.blit(banana_farm_shop_icon,(banana_farmshop))
     screen.blit(sniper_monkey_shop_icon,(sniper_monkeyshop))
+    screen.blit(spike_factory_shop_icon,(spike_factoryshop))
     
     moneytext=font.render(f"Money:{money}",True,(0,0,0))
     darttext=font.render(f"{dartcost}",True,(0,0,0))
@@ -413,6 +416,8 @@ def background():
     tacktext=font.render(f"{tackcost}",True,(0,0,0))
     bananatext=font.render(f"{bananacost}",True,(0,0,0))
     snipertext=font.render(f"{snipercost}",True,(0,0,0))
+    spiketext=font.render(f"{spikecost}",True,(0,0,0))
+    
     
     screen.blit(moneytext,(10,10))
     screen.blit(darttext,(775,150))
@@ -420,6 +425,7 @@ def background():
     screen.blit(boomtext,(775,350))
     screen.blit(bananatext,(875,150))
     screen.blit(snipertext,(875,250))
+    screen.blit(spiketext,(875,350))
     
 def dart_monkeyplace():
     screen.fill((255,255,255))
@@ -851,9 +857,47 @@ def in_dart_circle(x,balloonpos):
     
     
     
+def spikefactoryplace():  
+    screen.fill((255,255,255))
+    background()
+     
+    spikex,spikey = pygame.mouse.get_pos()
+     
+     
+    pygame.draw.circle(screen,(211,211,211),(spikex,spikey),spikerange)
+     
+     
+    for i in spike_factories:
+        screen.blit(spike_factory_model,(i[1][0]-25,i[1][1]-25))
+     
+     
+     
+    screen.blit(spike_factory_model,(spikex-25,spikey-25))
+     
+    spike_factoryhit=pygame.Rect(0,0,45,45)
+    spike_factoryhit.center=(spikex,spikey)
+     
+def spikefactoryplaced():
+     
+     spikeshoot=[spikerange,(spikestayx,spikestayy),(211,211,211)]
+     
+     spike_factoryshootbox.append(spikeshoot)
+     
+     d=[25,(spikestayx,spikestayy),(0,0,0)]
+     
+     spike_factorycooldowns.append(spikecooldown)
+     
+     spike_factories.append(d)
+     for i in range(len(spike_factories)):
+         spike_factoryhit=pygame.Rect(0,0,45,45)
+         spike_factoryhit.center=(spikestayx,spikestayy)
+         spike_factoryshit.append(spike_factoryhit)
+     for i in spike_factories:
+         screen.blit(spike_factory_model,(i[1][0]-25,i[1][1]-25))
     
-    
-    
+
+
+
     
     
 
@@ -903,6 +947,12 @@ def draw_monkeys():
     
     for i in bananas:
         pygame.draw.circle(screen,i[2],i[1],i[0])
+    
+    
+    #spikefactory
+    
+    for i in spike_factories:
+        screen.blit(spike_factory_model,(i[1][0]-25,i[1][1]-25))
         
         
 font=pygame.font.SysFont(None,36)
@@ -945,6 +995,11 @@ sniper_monkeyshootbox=[]
 sniper_monkeycooldowns=[]
 snipeds=[]
 
+spike_factories=[]
+spike_factoryshit=[]
+spike_factoryshootbox=[]
+spike_factorycooldowns=[]
+
 allhitboxes=[]
 
 dart_monkeyhit=pygame.Rect(0,0,25,25)
@@ -955,12 +1010,14 @@ tack_shootershop=pygame.Rect(0,0,50,50)
 boomerang_monkeyshop=pygame.Rect(0,0,50,50)
 banana_farmshop=pygame.Rect(0,0,50,50)
 sniper_monkeyshop=pygame.Rect(0,0,50,50)
+spike_factoryshop=pygame.Rect(0,0,50,50)
 
 dart_monkeyshop.center=(800,125)
 tack_shootershop.center=(800,225)
 boomerang_monkeyshop.center=(800,325)
 banana_farmshop.center=(900,125)
 sniper_monkeyshop.center=(900,225)
+spike_factoryshop.center=(900,325)
 
 playarea=pygame.Rect(0,0,700,600)
 spawn_queue=[]    
@@ -983,23 +1040,27 @@ boomrange=150
 tackrange=75
 sniperange=600
 bananarange=50
+spikerange=125
 
 dartcost=50
 boomcost=150
 tackcost=100
 snipercost=500
 bananacost=1000
+spikecost=300
 
 bananacooldown=600
 dartcooldown=30
 boomcooldown=120
 snipecooldown=180
 tackcooldown=60
+spikecooldown=180
 
 dartdamage=1
 boomdamage=1
 snipedamage=100
 tackdamage=1
+spikedamage=1
 
 dartspeed=5
 boomerangspeed=5
@@ -1016,6 +1077,8 @@ boomerang_monkeybought=False
 boomplaced=False
 dartplaced=False
 dart_monkeybought=False
+spikeplaced=False
+spike_factorybought=False
 running = True
 
 
@@ -1075,6 +1138,7 @@ while running and p_hp>0:
     tackoverlap=False
     snipeoverlap=False
     bananaoverlap=False
+    spikeoverlap=False
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -1193,6 +1257,24 @@ while running and p_hp>0:
                     
                     money+=10
          
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if spike_factoryshop.collidepoint(event.pos):
+                if money>=spikecost:    
+                    spike_factorybought=True
+                    money-=spikecost
+        if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and spike_factorybought:
+            mousex, mousey=pygame.mouse.get_pos()
+            for i in curway:
+                if mousey//50==i[0] and mousex//50==i[1]:
+                    spikeoverlap=True
+            for i in allhitboxes:
+                for n in i:
+                    if n.collidepoint(event.pos):
+                        spikeoverlap=True
+            if not spikeoverlap:    
+                spike_factorybought=False
+                spikestayx, spikestayy=pygame.mouse.get_pos()
+                spikeplaced=True
     
             
             
@@ -1411,6 +1493,20 @@ while running and p_hp>0:
     if len(bananas)>100:
         bananas.pop(0)
         bananashit.pop(0)
+    
+    
+    
+    if spike_factorybought:
+        if playarea.collidepoint(mousex,mousey):
+            spikefactoryplace()
+    if spikeplaced:
+        spikefactoryplaced()
+        spikeplaced=False
+    
+
+
+    
+    
     for pos in curway:
         rect = pygame.Rect(pos[1] * 50, pos[0] * 50, 50, 50)
         pygame.draw.rect(screen, (211, 211, 211), rect)
@@ -1431,7 +1527,7 @@ while running and p_hp>0:
             p_hp -= enemy[1]
             active_enemies.remove(enemy)
             continue
-
+    
         target = curway[enemy[5]]
         tx = target[1] * 50 + 25
         ty = target[0] * 50 + 25
