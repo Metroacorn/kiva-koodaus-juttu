@@ -258,54 +258,54 @@ def waves(wave_points, h_v, c_v, res):
         i += 1
 
         if ok in red_c:
-            wave_list.append([red[0], red[1], red[2], [start_x, start_y], red_s, 1, 0, i])
+            wave_list.append([red[0], red[1], red[2], [start_x, start_y], red_s, 1, 0, i,0])
             wave_points -= red_p
 
         if ok in blue_c:
-            wave_list.append([blue[0], blue[1], blue[2], [start_x, start_y], blue_s, 1, 1, i])
+            wave_list.append([blue[0], blue[1], blue[2], [start_x, start_y], blue_s, 1, 1, i,0])
             wave_points -= blue_p
 
         if ok in green_c:
-            wave_list.append([green[0], green[1], green[2], [start_x, start_y], green_s, 1, 2, i])
+            wave_list.append([green[0], green[1], green[2], [start_x, start_y], green_s, 1, 2, i,0])
             wave_points -= green_p
 
         if ok in yellow_c:
-            wave_list.append([yellow[0], yellow[1], yellow[2], [start_x, start_y], yellow_s, 1, 3, i])
+            wave_list.append([yellow[0], yellow[1], yellow[2], [start_x, start_y], yellow_s, 1, 3, i,0])
             wave_points -= yellow_p
 
         if ok in purple_c:
-            wave_list.append([purple[0], purple[1], purple[2], [start_x, start_y], purple_s, 1, 4, i])
+            wave_list.append([purple[0], purple[1], purple[2], [start_x, start_y], purple_s, 1, 4, i,0])
             wave_points -= purple_p
 
         if ok in white_c:
-            wave_list.append([white[0], white[1], white[2], [start_x, start_y], white_s, 1, 5, i])
+            wave_list.append([white[0], white[1], white[2], [start_x, start_y], white_s, 1, 5, i,0])
             wave_points -= white_p
 
         if ok in zebra_c:
-            wave_list.append([zebra[0], zebra[1], zebra[2], [start_x, start_y], zebra_s, 1, 6, i])
+            wave_list.append([zebra[0], zebra[1], zebra[2], [start_x, start_y], zebra_s, 1, 6, i,0])
             wave_points -= zebra_p
 
         if ok in rainbow_c:
-            wave_list.append([rainbow[0], rainbow[1], rainbow[2], [start_x, start_y], rainbow_s, 1, 7, i])
+            wave_list.append([rainbow[0], rainbow[1], rainbow[2], [start_x, start_y], rainbow_s, 1, 7, i,0])
             wave_points -= rainbow_p
 
         if ok in rock_c:
-            wave_list.append([rock[0], rock[1], rock[2]*res, [start_x, start_y], rock_s, 1, 8, i])
+            wave_list.append([rock[0], rock[1], rock[2]*res, [start_x, start_y], rock_s, 1, 8, i,0])
             wave_points -= rock_p
 
         if ok in blue_moad_c:
-            wave_list.append([blue_moab[0], blue_moab[1], blue_moab[2]*res, [start_x, start_y], blue_moab_s, 1, 9, i])
+            wave_list.append([blue_moab[0], blue_moab[1], blue_moab[2]*res, [start_x, start_y], blue_moab_s, 1, 9, i,0])
             wave_points -= blue_moab_p
 
         if ok in red_moab_c:
-            wave_list.append([red_moab[0], red_moab[1], red_moab[2]*res, [start_x, start_y], red_moab_s, 1, 10, i])
+            wave_list.append([red_moab[0], red_moab[1], red_moab[2]*res, [start_x, start_y], red_moab_s, 1, 10, i,0])
             wave_points -= red_moab_p
 
         if ok in green_moab_c:
-            wave_list.append([green_moab[0], green_moab[1], green_moab[2]*res, [start_x, start_y], green_moab_s, 1, 11, i])
+            wave_list.append([green_moab[0], green_moab[1], green_moab[2]*res, [start_x, start_y], green_moab_s, 1, 11, i,0])
             wave_points -= green_moab_p
         if ok>5000:
-            wave_list.append([green_moab[0], green_moab[1], green_moab[2]*res, [start_x, start_y], green_moab_s, 1, 11, i])
+            wave_list.append([green_moab[0], green_moab[1], green_moab[2]*res, [start_x, start_y], green_moab_s, 1, 11, i,0])
             wave_points -= green_moab_p
 
     return wave_list
