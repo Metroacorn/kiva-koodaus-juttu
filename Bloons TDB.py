@@ -616,7 +616,7 @@ def tack_shooterplaced():
 
 def tackshootershoot(i):
      if tack_shootercooldowns[i]==0:
-         tack_shootercooldowns[i]=snipecooldown
+         tack_shootercooldowns[i]=tackcooldown
      else:
          return
          
@@ -1105,7 +1105,7 @@ reset=False
 
 while running:
     if reset:
-        p_hp=p_hporiginal
+
         money=startmoney
         dart_monkeys=[]
         dart_monkeyshit=[]
@@ -1147,10 +1147,17 @@ while running:
         spike_factoryshit=[]
         spike_factoryshootbox=[]
         spike_factorycooldowns=[]
+        spikes=[]
 
         allhitboxes=[]
         
-        
+        active_enemies=[]
+        if p_hp==p_hporiginal:
+            c_v=1
+        p_hp=p_hporiginal
+        h_v=5
+        wave_points=100
+        res=1
         
         reset=False
         
@@ -1178,6 +1185,7 @@ while running:
         allhitboxes.append(sniper_monkeyshit)
         allhitboxes.append(tack_shootershit)
         allhitboxes.append(banana_farmshit)
+        allhitboxes.append(spike_factoryshit)
         
         screen.fill((255,255,255))
         clock.tick(60)
@@ -1196,7 +1204,7 @@ while running:
             if clump == False: 
                 start_x = curway[0][1] * 50 + 25
                 start_y = curway[0][0] * 50 + 25 
-                new_balloon = [cb[0], cb[1], cb[2], [start_x, start_y], cb[4], 1, cb[6], cb[7]]
+                new_balloon = [cb[0], cb[1], cb[2], [start_x, start_y], cb[4], 1, cb[6], cb[7],0]
                 active_enemies.append(new_balloon)
                 if current_time-oko>dur:
                     oko=current_time
