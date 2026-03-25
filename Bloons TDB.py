@@ -81,7 +81,7 @@ red_moab_hp=400
 green_moab_hp=2000
 
 
-p_hp=1
+p_hp=100
 p_hporiginal=p_hp
 #dmg
 red_dmg=1
@@ -1049,7 +1049,7 @@ shop=pygame.Rect(700,0,300,600)
 
 pygame.display.update()
 
-money=999999999
+money=250
 startmoney=money
 
 dartrange=125
@@ -1376,7 +1376,7 @@ while running:
         ct = pygame.time.get_ticks()
         if ct - factory[3] > 2000:
             factory[3] = ct
-            s += 1
+            
             attempts = 0
             while attempts < 100:
                 attempts += 1
@@ -1388,6 +1388,7 @@ while running:
                 if [grid_row, grid_col] in curway:
                     for j in range(5):
                         spikes.append([grid_col * 50 + 25, grid_row * 50 + 25, s])
+                        s += 1
                     break
 
     for n in active_enemies:
@@ -1651,11 +1652,11 @@ while running:
         for i in active_enemies:
             if i[6]<9:
                 pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 20)
-            if i[6]==10:
+            if i[6]==9:
                 pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 35)
-            if i[6]==11:
+            if i[6]==10:
                 pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 45)
-            if i[6]==12:
+            if i[6]==11:
                 pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 60)
          
         for enemy in active_enemies[:]:
