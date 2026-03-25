@@ -1362,6 +1362,35 @@ while running:
                     spike_factorybought=False
                     spikestayx, spikestayy=pygame.mouse.get_pos()
                     spikeplaced=True
+for factory in spike_factories:
+        ct = pygame.time.get_ticks()
+        if ct - factory[3] > 2000:
+            factory[3] = ct
+            s += 1
+            attempts = 0
+            while attempts < 100:
+                attempts += 1
+                placex = random.randint(factory[1][0] - 100, factory[1][0] + 100)
+                placey = random.randint(factory[1][1] - 100, factory[1][1] + 100)
+                grid_col = placex // 50
+                grid_row = placey // 50
+
+                if [grid_row, grid_col] in curway:
+                    for j in range(5):
+                        spikes.append([grid_col * 50 + 25, grid_row * 50 + 25, s])
+                    break
+
+    for n in active_enemies:
+        hit = pygame.Rect(0, 0, 50, 50)
+        hit.center = (n[3])
+
+        for i in spikes[:]:
+            if hit.collidepoint(i[0], i[1]):
+                n[2] -= 1
+                spikes.remove(i)
+                break
+
+
     
     if gameon:         
             
@@ -1457,7 +1486,8 @@ while running:
                 boomerangs[i][0] -= boomerangs[i][2] * boomerangs[i][4]
                 boomerangs[i][1] -= boomerangs[i][3] * boomerangs[i][4]
             
-            
+    
+        
         for i in range(len(comingback)):
             if boomerangmax(i)>boomrange:
                 comingback.pop(i)
@@ -1477,11 +1507,14 @@ while running:
     
     
     
-        for boomerang in boomerangs[:]:
-            if hit.collidepoint(boomerang[0],boomerang[1]):
-                ct=pygame.time.get_ticks()
-                if ct-i[8]>200:
-                    i[2]-=boomdamage
+        for i in active_enemies:
+            hit = pygame.Rect(0,0,50,50)
+            hit.center = (i[3])
+            for boomerang in boomerangs[:]:           
+                if hit.collidepoint(boomerang[0], boomerang[1]):
+                    ct = pygame.time.get_ticks()
+                    if ct - i[8] > 200:
+                        i[2] -= boomdamage 
                     
                 
         
@@ -1642,6 +1675,8 @@ while running:
         screen.blit(wave_text, (590, 10))
         screen.blit(hp_text, (500, 10))      
         background()
+        for i in spikes:
+            pygame.draw.circle(screen, (235, 0, 0), (i[0], i[1]), 15)
     if menuon:
         menu()
     pygame.display.update()
