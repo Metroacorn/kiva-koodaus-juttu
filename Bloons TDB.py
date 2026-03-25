@@ -81,7 +81,8 @@ red_moab_hp=400
 green_moab_hp=2000
 
 
-p_hp=100
+p_hp=1
+p_hporiginal=p_hp
 #dmg
 red_dmg=1
 blue_dmg=2
@@ -406,7 +407,12 @@ arvot=[red,blue,green,yellow,purple,white,zebra,rainbow,rock,blue_moab,red_moab,
 
 def menu():
     screen.fill((0,255,0))
+    pygame.draw.rect(screen,(255,0,0),start_button)
     
+    starttext=startfont.render("Start",True,(0,0,0))
+    
+    screen.blit(starttext,(start_button.center[0]-75,start_button.center[1]-30))
+
 
 def background():
     pygame.draw.rect(screen,(139, 69, 19),shop)    
@@ -963,6 +969,7 @@ def draw_monkeys():
         
         
 font=pygame.font.SysFont(None,36)
+startfont=pygame.font.SysFont(None,100)
 
 
 
@@ -1043,6 +1050,7 @@ shop=pygame.Rect(700,0,300,600)
 pygame.display.update()
 
 money=999999999
+startmoney=money
 
 dartrange=125
 boomrange=150
@@ -1089,485 +1097,551 @@ dart_monkeybought=False
 spikeplaced=False
 spike_factorybought=False
 running = True
-menuon=False
+menuon=True
+gameon=False
+reset=False
 
 
 
 while running:
+    if reset:
+        p_hp=p_hporiginal
+        money=startmoney
+        dart_monkeys=[]
+        dart_monkeyshit=[]
+        dart_monkeyshootbox=[] 
+        dart_monkeycooldowns=[]
+        darts=[]
+         
+
+        boomerang_monkeys=[]
+        boomerang_monkeyhit=[]
+        boomerang_monkeyshootbox=[]
+        boomerang_monkeycooldowns=[]
+        boomerangs=[]
+        boomerangdistance=[]
+        comingback=[]
+        boomdistance=[]
+
+        tack_shooters=[]
+        tack_shootershit=[]
+        tack_shootershootbox=[]
+        tack_shootercooldowns=[]
+        tacks=[]
+
+        banana_farms=[]
+        banana_farmshit=[]
+        banana_farmshootbox=[]
+        banana_farmcooldowns=[]
+        bananas=[]
+        bananashit=[]
+
+
+        sniper_monkeys=[]
+        sniper_monkeyshit=[]
+        sniper_monkeyshootbox=[]
+        sniper_monkeycooldowns=[]
+        snipeds=[]
+
+        spike_factories=[]
+        spike_factoryshit=[]
+        spike_factoryshootbox=[]
+        spike_factorycooldowns=[]
+
+        allhitboxes=[]
+        
+        
+        
+        reset=False
+        
     
     if p_hp<0:
         menuon=True
-    
-    allhitboxes.clear()
-    allhitboxes.append(dart_monkeyshit)
-    allhitboxes.append(boomerang_monkeyhit)
-    allhitboxes.append(sniper_monkeyshit)
-    allhitboxes.append(tack_shootershit)
-    allhitboxes.append(banana_farmshit)
-    
-    screen.fill((255,255,255))
-    clock.tick(60)
-    
-    if len(spawn_queue)==0 and len(active_enemies)==0:
         
-        spawn_queue=waves(wave_points, h_v, c_v,res)
-        c_v+=1
-        h_v=h_v+c_v*3
-        wave_points+=wave_points*0.1
-        if c_v>20:
-            res+=(1+c_v//20)
-    
-    current_time = pygame.time.get_ticks()
-    if len(spawn_queue) > 0 and current_time - last_spawn_time >= SPAWN_DELAY:
-        if clump == False: 
-            start_x = curway[0][1] * 50 + 25
-            start_y = curway[0][0] * 50 + 25 
-            new_balloon = [cb[0], cb[1], cb[2], [start_x, start_y], cb[4], 1, cb[6], cb[7]]
-            active_enemies.append(new_balloon)
-            if current_time-oko>dur:
-                oko=current_time
-                SPAWN_DELAY=250
-                dur=random.randint(1000,10000)
-                clump=True
-        else:
-            active_enemies.append(spawn_queue.pop(0))
-            last_spawn_time = current_time
-            if c_v > 5:
-                cl = random.randint(1, 40)
-                if cl == 5 and clump == True and current_time-m>cooldown:
-                    SPAWN_DELAY = 50
-                    clump = False 
-                    last = active_enemies[-1]
-                    cb = [last[0], last[1], last[2], None, last[4], last[5], last[6], last[7]] 
-                    cooldown=random.randint(20000,400000)
-        
-    if clump==True:
-        oko=current_time
-
-
-    
-    dartoverlap=False
-    boomoverlap=False
-    tackoverlap=False
-    snipeoverlap=False
-    bananaoverlap=False
-    spikeoverlap=False
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if dart_monkeyshop.collidepoint(event.pos):
-                if money>=dartcost:    
-                    dart_monkeybought=True
-                    money-=dartcost
-        if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and dart_monkeybought:
-            mousex, mousey=pygame.mouse.get_pos()
-            for i in curway:
-                if mousey//50==i[0] and mousex//50==i[1]:
-                    dartoverlap=True
-            for i in allhitboxes:
-                for n in i:
-                    if n.collidepoint(event.pos):
-                        dartoverlap=True
-            if not dartoverlap:    
-                dart_monkeybought=False
-                dartstayx, dartstayy=pygame.mouse.get_pos()
-                dartplaced=True
+    if menuon:
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if start_button.collidepoint(event.pos):
+                    menuon=False
+                    gameon=True
+                    reset=True
             
+            if event.type == pygame.QUIT:
+                running=False
         
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if boomerang_monkeyshop.collidepoint(event.pos):
-                if money>=boomcost:
-                    boomerang_monkeybought=True
-                    money-=boomcost
-        if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and boomerang_monkeybought:
-            mousex, mousey=pygame.mouse.get_pos()
-            for i in curway:
-                if mousey//50==i[0] and mousex//50==i[1]:
-                    boomoverlap=True
-            for i in allhitboxes:
-                for n in i:
-                    if n.collidepoint(event.pos):
-                        boomoverlap=True
-            if not boomoverlap:
-                boomerang_monkeybought=False
-                boomstayx, boomstayy=pygame.mouse.get_pos()
-                boomplaced=True
+        
+        
+    if gameon:
+        allhitboxes.clear()
+        allhitboxes.append(dart_monkeyshit)
+        allhitboxes.append(boomerang_monkeyhit)
+        allhitboxes.append(sniper_monkeyshit)
+        allhitboxes.append(tack_shootershit)
+        allhitboxes.append(banana_farmshit)
+        
+        screen.fill((255,255,255))
+        clock.tick(60)
+        
+        if len(spawn_queue)==0 and len(active_enemies)==0:
+            
+            spawn_queue=waves(wave_points, h_v, c_v,res)
+            c_v+=1
+            h_v=h_v+c_v*3
+            wave_points+=wave_points*0.1
+            if c_v>20:
+                res+=(1+c_v//20)
+        
+        current_time = pygame.time.get_ticks()
+        if len(spawn_queue) > 0 and current_time - last_spawn_time >= SPAWN_DELAY:
+            if clump == False: 
+                start_x = curway[0][1] * 50 + 25
+                start_y = curway[0][0] * 50 + 25 
+                new_balloon = [cb[0], cb[1], cb[2], [start_x, start_y], cb[4], 1, cb[6], cb[7]]
+                active_enemies.append(new_balloon)
+                if current_time-oko>dur:
+                    oko=current_time
+                    SPAWN_DELAY=250
+                    dur=random.randint(1000,10000)
+                    clump=True
+            else:
+                active_enemies.append(spawn_queue.pop(0))
+                last_spawn_time = current_time
+                if c_v > 5:
+                    cl = random.randint(1, 40)
+                    if cl == 5 and clump == True and current_time-m>cooldown:
+                        SPAWN_DELAY = 50
+                        clump = False 
+                        last = active_enemies[-1]
+                        cb = [last[0], last[1], last[2], None, last[4], last[5], last[6], last[7]] 
+                        cooldown=random.randint(20000,400000)
+            
+        if clump==True:
+            oko=current_time
+    
+    
+        
+        dartoverlap=False
+        boomoverlap=False
+        tackoverlap=False
+        snipeoverlap=False
+        bananaoverlap=False
+        spikeoverlap=False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if dart_monkeyshop.collidepoint(event.pos):
+                    if money>=dartcost:    
+                        dart_monkeybought=True
+                        money-=dartcost
+            if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and dart_monkeybought:
+                mousex, mousey=pygame.mouse.get_pos()
+                for i in curway:
+                    if mousey//50==i[0] and mousex//50==i[1]:
+                        dartoverlap=True
+                for i in allhitboxes:
+                    for n in i:
+                        if n.collidepoint(event.pos):
+                            dartoverlap=True
+                if not dartoverlap:    
+                    dart_monkeybought=False
+                    dartstayx, dartstayy=pygame.mouse.get_pos()
+                    dartplaced=True
                 
             
-        
-        
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if tack_shootershop.collidepoint(event.pos):
-                if money>=tackcost:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if boomerang_monkeyshop.collidepoint(event.pos):
+                    if money>=boomcost:
+                        boomerang_monkeybought=True
+                        money-=boomcost
+            if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and boomerang_monkeybought:
+                mousex, mousey=pygame.mouse.get_pos()
+                for i in curway:
+                    if mousey//50==i[0] and mousex//50==i[1]:
+                        boomoverlap=True
+                for i in allhitboxes:
+                    for n in i:
+                        if n.collidepoint(event.pos):
+                            boomoverlap=True
+                if not boomoverlap:
+                    boomerang_monkeybought=False
+                    boomstayx, boomstayy=pygame.mouse.get_pos()
+                    boomplaced=True
                     
-                    tack_shooterbought=True
-                    money-=tackcost
-        if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and tack_shooterbought:
-            mousex, mousey=pygame.mouse.get_pos()
-            for i in curway:
-                if mousey//50==i[0] and mousex//50==i[1]:
-                    tackoverlap=True
-            for i in allhitboxes:
-                for n in i:
-                    if n.collidepoint(event.pos):
-                        tackoverlap=True  
-            if not tackoverlap:
-                tack_shooterbought=False
-                tackstayx, tackstayy=pygame.mouse.get_pos()
-                tackplaced=True
+                
             
-        
-        
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if sniper_monkeyshop.collidepoint(event.pos):
-                if money>=snipercost:
-                    
-                    sniper_monkeybought=True
-                    money-=snipercost
-        if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and sniper_monkeybought:
-            mousex, mousey=pygame.mouse.get_pos()
-            for i in curway:
-                if mousey//50==i[0] and mousex//50==i[1]:
-                    snipeoverlap=True
             
-            for i in allhitboxes:
-                for n in i:
-                    if n.collidepoint(event.pos):
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if tack_shootershop.collidepoint(event.pos):
+                    if money>=tackcost:
+                        
+                        tack_shooterbought=True
+                        money-=tackcost
+            if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and tack_shooterbought:
+                mousex, mousey=pygame.mouse.get_pos()
+                for i in curway:
+                    if mousey//50==i[0] and mousex//50==i[1]:
+                        tackoverlap=True
+                for i in allhitboxes:
+                    for n in i:
+                        if n.collidepoint(event.pos):
+                            tackoverlap=True  
+                if not tackoverlap:
+                    tack_shooterbought=False
+                    tackstayx, tackstayy=pygame.mouse.get_pos()
+                    tackplaced=True
+                
+            
+            
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if sniper_monkeyshop.collidepoint(event.pos):
+                    if money>=snipercost:
+                        
+                        sniper_monkeybought=True
+                        money-=snipercost
+            if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and sniper_monkeybought:
+                mousex, mousey=pygame.mouse.get_pos()
+                for i in curway:
+                    if mousey//50==i[0] and mousex//50==i[1]:
                         snipeoverlap=True
-            
-            if not snipeoverlap:
-                sniper_monkeybought=False
-                snipestayx, snipestayy=pygame.mouse.get_pos()
-                sniperplaced=True
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if banana_farmshop.collidepoint(event.pos):
-                if money>=bananacost:
-                    
-                    banana_farmbought=True
-                    money-=bananacost
-        if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and banana_farmbought:
-            mousex, mousey = pygame.mouse.get_pos()
-            for i in curway:
-                if mousey//50==i[0] and mousex//50 == i[1]:
-                    bananaoverlap=True
-            
-            for i in allhitboxes:
-                for n in i:
-                    if n.collidepoint(event.pos):
+                
+                for i in allhitboxes:
+                    for n in i:
+                        if n.collidepoint(event.pos):
+                            snipeoverlap=True
+                
+                if not snipeoverlap:
+                    sniper_monkeybought=False
+                    snipestayx, snipestayy=pygame.mouse.get_pos()
+                    sniperplaced=True
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if banana_farmshop.collidepoint(event.pos):
+                    if money>=bananacost:
+                        
+                        banana_farmbought=True
+                        money-=bananacost
+            if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and banana_farmbought:
+                mousex, mousey = pygame.mouse.get_pos()
+                for i in curway:
+                    if mousey//50==i[0] and mousex//50 == i[1]:
                         bananaoverlap=True
+                
+                for i in allhitboxes:
+                    for n in i:
+                        if n.collidepoint(event.pos):
+                            bananaoverlap=True
+                
+                if not bananaoverlap:
+                    banana_farmbought=False
+                    bananastayx, bananastayy = pygame.mouse.get_pos()
+                    bananaplaced=True
             
-            if not bananaoverlap:
-                banana_farmbought=False
-                bananastayx, bananastayy = pygame.mouse.get_pos()
-                bananaplaced=True
-        
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            for i in range(len(bananashit)-1,-1,-1):
-                if bananashit[i].collidepoint(event.pos):
-                    bananashit.pop(i)
-                    bananas.pop(i)
-                    
-                    money+=10
-         
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if spike_factoryshop.collidepoint(event.pos):
-                if money>=spikecost:    
-                    spike_factorybought=True
-                    money-=spikecost
-        if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and spike_factorybought:
-            mousex, mousey=pygame.mouse.get_pos()
-            for i in curway:
-                if mousey//50==i[0] and mousex//50==i[1]:
-                    spikeoverlap=True
-            for i in allhitboxes:
-                for n in i:
-                    if n.collidepoint(event.pos):
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for i in range(len(bananashit)-1,-1,-1):
+                    if bananashit[i].collidepoint(event.pos):
+                        bananashit.pop(i)
+                        bananas.pop(i)
+                        
+                        money+=10
+             
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if spike_factoryshop.collidepoint(event.pos):
+                    if money>=spikecost:    
+                        spike_factorybought=True
+                        money-=spikecost
+            if event.type == pygame.MOUSEBUTTONDOWN and playarea.collidepoint(event.pos) and spike_factorybought:
+                mousex, mousey=pygame.mouse.get_pos()
+                for i in curway:
+                    if mousey//50==i[0] and mousex//50==i[1]:
                         spikeoverlap=True
-            if not spikeoverlap:    
-                spike_factorybought=False
-                spikestayx, spikestayy=pygame.mouse.get_pos()
-                spikeplaced=True
+                for i in allhitboxes:
+                    for n in i:
+                        if n.collidepoint(event.pos):
+                            spikeoverlap=True
+                if not spikeoverlap:    
+                    spike_factorybought=False
+                    spikestayx, spikestayy=pygame.mouse.get_pos()
+                    spikeplaced=True
     
+    if gameon:         
             
-            
-    mousex, mousey=pygame.mouse.get_pos()
-    
-    
-    if dart_monkeybought:
-        if playarea.collidepoint(mousex,mousey):
-            dart_monkeyplace()
-    if dartplaced:
-        dart_monkeyplaced()
-        dartplaced=False
-    
-    for i in range(len(dart_monkeycooldowns)):
-        if dart_monkeycooldowns[i]>0:
-            dart_monkeycooldowns[i]-=1
-    for i in range(len(dart_monkeyshootbox)):
-        for n in active_enemies:
-            if in_dart_circle(dart_monkeyshootbox[i],n[3]):
-                dart_monkeyshoot(i,n[3])
-                break
-    
-            
-    
-    
-    for dart in darts:
-        dart[0] += dart[2] * dart[4]
-        dart[1] += dart[3] * dart[4]
+        mousex, mousey=pygame.mouse.get_pos()
         
-    for dart in darts:
-        if dart[0]>1000 or dart[0]<0:
-            if dart[1]>600 or dart[1]<0:
-                darts.remove(dart)
+        
+        if dart_monkeybought:
+            if playarea.collidepoint(mousex,mousey):
+                dart_monkeyplace()
+        if dartplaced:
+            dart_monkeyplaced()
+            dartplaced=False
+        
+        for i in range(len(dart_monkeycooldowns)):
+            if dart_monkeycooldowns[i]>0:
+                dart_monkeycooldowns[i]-=1
+        for i in range(len(dart_monkeyshootbox)):
+            for n in active_enemies:
+                if in_dart_circle(dart_monkeyshootbox[i],n[3]):
+                    dart_monkeyshoot(i,n[3])
+                    break
+        
+                
+        
+        
+        for dart in darts:
+            dart[0] += dart[2] * dart[4]
+            dart[1] += dart[3] * dart[4]
             
+        for dart in darts:
+            if dart[0]>1000 or dart[0]<0:
+                if dart[1]>600 or dart[1]<0:
+                    darts.remove(dart)
+                
+        
     
-
-    for i in active_enemies:
-        hit=pygame.Rect(0,0,50,50)
-        hit.center=(i[3])
-
-
-
-        for dart in darts[:]:
-            if hit.collidepoint(dart[0],dart[1]):
-                i[2]-=dartdamage
-                darts.remove(dart)
-                break
-            
-
-
-
-    for i in active_enemies:
-        if i[2]<=0:
-            
-            
-            if c_v>9:
-                ll=random.randint(1,c_v)
-                if ll==1:
+        for i in active_enemies:
+            hit=pygame.Rect(0,0,50,50)
+            hit.center=(i[3])
+    
+    
+    
+            for dart in darts[:]:
+                if hit.collidepoint(dart[0],dart[1]):
+                    i[2]-=dartdamage
+                    darts.remove(dart)
+                    break
+                
+    
+    
+    
+        for i in active_enemies:
+            if i[2]<=0:
+                
+                
+                if c_v>9:
+                    ll=random.randint(1,c_v)
+                    if ll==1:
+                        money+=1
+                else:
                     money+=1
-            else:
-                money+=1
-            mo=pygame.time.get_ticks()
-            pop(i[6], i,mo)
-    if boomerang_monkeybought:
-        if playarea.collidepoint(mousex,mousey):
-            boomerang_monkeyplace()
-    if boomplaced:
-        boomerang_monkeyplaced()
-        boomplaced=False
+                mo=pygame.time.get_ticks()
+                pop(i[6], i,mo)
+        if boomerang_monkeybought:
+            if playarea.collidepoint(mousex,mousey):
+                boomerang_monkeyplace()
+        if boomplaced:
+            boomerang_monkeyplaced()
+            boomplaced=False
+            
+        for i in range(len(boomerang_monkeycooldowns)):
+            if boomerang_monkeycooldowns[i]>0:
+                boomerang_monkeycooldowns[i]-=1
         
-    for i in range(len(boomerang_monkeycooldowns)):
-        if boomerang_monkeycooldowns[i]>0:
-            boomerang_monkeycooldowns[i]-=1
-    
-    for i in range(len(boomerang_monkeyshootbox)):
-        for n in active_enemies:
-            if in_dart_circle(boomerang_monkeyshootbox[i],n[3]):
-                boomerang_monkeyshoot(i,n[3])
-                break
-    
-    for i in range(len(boomerangs)-1,-1,-1):
-        if boomerangs[i][0]==boomerangs[i][5]:
-            if boomerangs[i][1]==boomerangs[i][6]:
-                if comingback[i]:
+        for i in range(len(boomerang_monkeyshootbox)):
+            for n in active_enemies:
+                if in_dart_circle(boomerang_monkeyshootbox[i],n[3]):
+                    boomerang_monkeyshoot(i,n[3])
+                    break
+        
+        for i in range(len(boomerangs)-1,-1,-1):
+            if boomerangs[i][0]==boomerangs[i][5]:
+                if boomerangs[i][1]==boomerangs[i][6]:
+                    if comingback[i]:
+                        boomerangs.pop(i)
+                        comingback.pop(i)
+                
+        for i in range(len(comingback)):
+            if not comingback[i]:
+                boomerangs[i][0] += boomerangs[i][2] * boomerangs[i][4]
+                boomerangs[i][1] += boomerangs[i][3] * boomerangs[i][4]
+            else:
+                boomerangs[i][0] -= boomerangs[i][2] * boomerangs[i][4]
+                boomerangs[i][1] -= boomerangs[i][3] * boomerangs[i][4]
+            
+            
+        for i in range(len(comingback)):
+            if boomerangmax(i)>boomrange:
+                comingback.pop(i)
+                comingback.insert(i,True)
+        
+        for i in range(len(boomerangs)-1,-1,-1):
+            if boomerangs[i][0]>1000 or boomerangs[i][0]<0:
+                if boomerangs[i][1]>600 or boomerangs[i][1]<0:
                     boomerangs.pop(i)
                     comingback.pop(i)
-            
-    for i in range(len(comingback)):
-        if not comingback[i]:
-            boomerangs[i][0] += boomerangs[i][2] * boomerangs[i][4]
-            boomerangs[i][1] += boomerangs[i][3] * boomerangs[i][4]
-        else:
-            boomerangs[i][0] -= boomerangs[i][2] * boomerangs[i][4]
-            boomerangs[i][1] -= boomerangs[i][3] * boomerangs[i][4]
-        
-        
-    for i in range(len(comingback)):
-        if boomerangmax(i)>boomrange:
-            comingback.pop(i)
-            comingback.insert(i,True)
-    
-    for i in range(len(boomerangs)-1,-1,-1):
-        if boomerangs[i][0]>1000 or boomerangs[i][0]<0:
-            if boomerangs[i][1]>600 or boomerangs[i][1]<0:
-                boomerangs.pop(i)
-                comingback.pop(i)
-            
-    
-
-    for i in active_enemies:
-        hit=pygame.Rect(0,0,50,50)
-        hit.center=(i[3])
-
-
-
-    for boomerang in boomerangs[:]:
-        if hit.collidepoint(boomerang[0],boomerang[1]):
-            ct=pygame.time.get_ticks()
-            if ct-i[8]>200:
-                i[2]-=boomdamage
                 
-            
+        
     
-    if tack_shooterbought:
-        if playarea.collidepoint(mousex,mousey):
-            tack_shooterplace()
-    if tackplaced:
-        tack_shooterplaced()
-        tackplaced=False
-      
-    for i in range(len(tack_shootercooldowns)):
-        if tack_shootercooldowns[i]>0:
-            tack_shootercooldowns[i]-=1
-    for i in range(len(tack_shootershootbox)):
+        for i in active_enemies:
+            hit=pygame.Rect(0,0,50,50)
+            hit.center=(i[3])
+    
+    
+    
+        for boomerang in boomerangs[:]:
+            if hit.collidepoint(boomerang[0],boomerang[1]):
+                ct=pygame.time.get_ticks()
+                if ct-i[8]>200:
+                    i[2]-=boomdamage
+                    
+                
+        
+        if tack_shooterbought:
+            if playarea.collidepoint(mousex,mousey):
+                tack_shooterplace()
+        if tackplaced:
+            tack_shooterplaced()
+            tackplaced=False
+          
+        for i in range(len(tack_shootercooldowns)):
+            if tack_shootercooldowns[i]>0:
+                tack_shootercooldowns[i]-=1
+        for i in range(len(tack_shootershootbox)):
+            for n in active_enemies:
+                if in_tack_circle(tack_shootershootbox[i],n[3]):
+                    tackshootershoot(i)
+                    break
+        for n in tacks:
+            for i in n:
+                i[0] += i[2] * i[4]
+                i[1] += i[3] * i[4]
+        for i in range(len(tacks)-1,-1,-1):
+            n=tacks[i]
+            dx=n[0][5]-n[0][0]
+            dy=n[0][6]-n[0][1]
+                    
+            if dx**2 + dy**2 >= tackrange**2:
+                tacks.pop(i)
+        
+        
         for n in active_enemies:
-            if in_tack_circle(tack_shootershootbox[i],n[3]):
-                tackshootershoot(i)
-                break
-    for n in tacks:
-        for i in n:
+            hit=pygame.Rect(0,0,50,50)
+            hit.center=(n[3])
+    
+    
+    
+            for a in tacks[:]:
+                for i in a:
+                    if hit.collidepoint(i[0],i[1]):
+                        ct=pygame.time.get_ticks()
+                        if ct-n[8]>150:
+                            n[2]-=tackdamage 
+                    
+    
+        
+        
+        if sniper_monkeybought:
+            if playarea.collidepoint(mousex,mousey):
+                sniper_monkeyplace()
+        
+        if sniperplaced:
+            sniper_monkeyplaced()
+            sniperplaced=False
+        
+        for i in range(len(sniper_monkeycooldowns)):
+            if sniper_monkeycooldowns[i]>0:
+                sniper_monkeycooldowns[i]-=1
+        for i in range(len(sniper_monkeyshootbox)):
+            for n in active_enemies:
+                if in_snipe_circle(sniper_monkeyshootbox[i],n[3]):
+                    sniper_monkeyshoot(i,n[3])
+                    break
+        
+                
+        
+        
+        for i in snipeds:
             i[0] += i[2] * i[4]
             i[1] += i[3] * i[4]
-    for i in range(len(tacks)-1,-1,-1):
-        n=tacks[i]
-        dx=n[0][5]-n[0][0]
-        dy=n[0][6]-n[0][1]
-                
-        if dx**2 + dy**2 >= tackrange**2:
-            tacks.pop(i)
-    
-    
-    for n in active_enemies:
-        hit=pygame.Rect(0,0,50,50)
-        hit.center=(n[3])
-
-
-
-        for a in tacks[:]:
-            for i in a:
-                if hit.collidepoint(i[0],i[1]):
-                    ct=pygame.time.get_ticks()
-                    if ct-n[8]>150:
-                        n[2]-=tackdamage 
-                
-
-    
-    
-    if sniper_monkeybought:
-        if playarea.collidepoint(mousex,mousey):
-            sniper_monkeyplace()
-    
-    if sniperplaced:
-        sniper_monkeyplaced()
-        sniperplaced=False
-    
-    for i in range(len(sniper_monkeycooldowns)):
-        if sniper_monkeycooldowns[i]>0:
-            sniper_monkeycooldowns[i]-=1
-    for i in range(len(sniper_monkeyshootbox)):
-        for n in active_enemies:
-            if in_snipe_circle(sniper_monkeyshootbox[i],n[3]):
-                sniper_monkeyshoot(i,n[3])
-                break
-    
             
-    
-    
-    for i in snipeds:
-        i[0] += i[2] * i[4]
-        i[1] += i[3] * i[4]
+        for i in snipeds:
+            if i[0]>1000 or i[0]<0:
+                if i[1]>600 or i[1]<0:
+                    snipeds.remove(i)
+                
         
-    for i in snipeds:
-        if i[0]>1000 or i[0]<0:
-            if i[1]>600 or i[1]<0:
-                snipeds.remove(i)
-            
     
-
-    for n in active_enemies:
-        hit=pygame.Rect(0,0,50,50)
-        hit.center=(n[3])
-
-
-
-        for i in snipeds[:]:
-            if hit.collidepoint(i[0],i[1]):
-                n[2]-=snipedamage
-                snipeds.remove(i)
-                break
-    
-    if banana_farmbought:
-        if playarea.collidepoint(mousex, mousey):
-            banana_farmplace()
-    
-    if bananaplaced:
-        banana_farmplaced()
-        bananaplaced=False
-    
-    for i in range(len(banana_farms)):
-        banana_farmfarm(i)
-    
-    if len(bananas)>100:
-        bananas.pop(0)
-        bananashit.pop(0)
+        for n in active_enemies:
+            hit=pygame.Rect(0,0,50,50)
+            hit.center=(n[3])
     
     
     
-    if spike_factorybought:
-        if playarea.collidepoint(mousex,mousey):
-            spikefactoryplace()
-    if spikeplaced:
-        spikefactoryplaced()
-        spikeplaced=False
+            for i in snipeds[:]:
+                if hit.collidepoint(i[0],i[1]):
+                    n[2]-=snipedamage
+                    snipeds.remove(i)
+                    break
+        
+        if banana_farmbought:
+            if playarea.collidepoint(mousex, mousey):
+                banana_farmplace()
+        
+        if bananaplaced:
+            banana_farmplaced()
+            bananaplaced=False
+        
+        for i in range(len(banana_farms)):
+            banana_farmfarm(i)
+        
+        if len(bananas)>100:
+            bananas.pop(0)
+            bananashit.pop(0)
+        
+        
+        
+        if spike_factorybought:
+            if playarea.collidepoint(mousex,mousey):
+                spikefactoryplace()
+        if spikeplaced:
+            spikefactoryplaced()
+            spikeplaced=False
+        
     
-
-
     
+        
+        
+        for pos in curway:
+            rect = pygame.Rect(pos[1] * 50, pos[0] * 50, 50, 50)
+            pygame.draw.rect(screen, (211, 211, 211), rect)
+            pygame.draw.rect(screen, (200, 211, 0), rect, 1)    
     
-    for pos in curway:
-        rect = pygame.Rect(pos[1] * 50, pos[0] * 50, 50, 50)
-        pygame.draw.rect(screen, (211, 211, 211), rect)
-        pygame.draw.rect(screen, (200, 211, 0), rect, 1)    
-
-    for i in active_enemies:
-        if i[6]<9:
-            pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 20)
-        if i[6]==10:
-            pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 35)
-        if i[6]==11:
-            pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 45)
-        if i[6]==12:
-            pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 60)
-     
-    for enemy in active_enemies[:]:
-        if enemy[5] >= len(curway):
-            p_hp -= enemy[1]
-            active_enemies.remove(enemy)
-            continue
+        for i in active_enemies:
+            if i[6]<9:
+                pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 20)
+            if i[6]==10:
+                pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 35)
+            if i[6]==11:
+                pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 45)
+            if i[6]==12:
+                pygame.draw.circle(screen, i[0], (int(i[3][0]), int(i[3][1])), 60)
+         
+        for enemy in active_enemies[:]:
+            if enemy[5] >= len(curway):
+                p_hp -= enemy[1]
+                active_enemies.remove(enemy)
+                continue
+        
+            target = curway[enemy[5]]
+            tx = target[1] * 50 + 25
+            ty = target[0] * 50 + 25
     
-        target = curway[enemy[5]]
-        tx = target[1] * 50 + 25
-        ty = target[0] * 50 + 25
-
-        dx = tx - enemy[3][0]
-        dy = ty - enemy[3][1]
-        dist = (dx**2 + dy**2) ** 0.5
-
-        if dist <= enemy[4]:
-            enemy[3][0] = tx
-            enemy[3][1] = ty
-            enemy[5] += 1
-        elif dist > 0:
-            enemy[3][0] += enemy[4] * dx / dist
-            enemy[3][1] += enemy[4] * dy / dist
-    draw_monkeys() 
-    wave_text = font.render(f"Wave: {c_v}", True, (0, 0, 0))
-    hp_text = font.render(f"HP: {p_hp}", True, (0, 0, 0))
-    screen.blit(wave_text, (590, 10))
-    screen.blit(hp_text, (500, 10))      
-    background()
+            dx = tx - enemy[3][0]
+            dy = ty - enemy[3][1]
+            dist = (dx**2 + dy**2) ** 0.5
+    
+            if dist <= enemy[4]:
+                enemy[3][0] = tx
+                enemy[3][1] = ty
+                enemy[5] += 1
+            elif dist > 0:
+                enemy[3][0] += enemy[4] * dx / dist
+                enemy[3][1] += enemy[4] * dy / dist
+        draw_monkeys() 
+        wave_text = font.render(f"Wave: {c_v}", True, (0, 0, 0))
+        hp_text = font.render(f"HP: {p_hp}", True, (0, 0, 0))
+        screen.blit(wave_text, (590, 10))
+        screen.blit(hp_text, (500, 10))      
+        background()
     if menuon:
         menu()
     pygame.display.update()
