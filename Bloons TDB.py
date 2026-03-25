@@ -687,11 +687,11 @@ def sniper_monkeyplace():
     
     
    for i in sniper_monkeys:
-       screen.blit(sniper_monkey_model,(i[1][0]-25,i[1][1]-25))
+       screen.blit(sniper_monkey_model,(i[1][0]-25,i[1][1]-75))
     
     
     
-   screen.blit(sniper_monkey_model,(snipex-25,snipey-25))
+   screen.blit(sniper_monkey_model,(snipex-25,snipey-75))
     
    sniper_monkeyhit=pygame.Rect(0,0,45,45)
    sniper_monkeyhit.center=(snipex,snipey)
@@ -712,7 +712,7 @@ def sniper_monkeyplaced():
         sniper_monkeyhit.center=(snipestayx,snipestayy)
         sniper_monkeyshit.append(sniper_monkeyhit)
     for i in sniper_monkeys:
-        screen.blit(sniper_monkey_model,(i[1][0]-25,i[1][1]-25))
+        screen.blit(sniper_monkey_model,(i[1][0]-25,i[1][1]-75))
   
    
 
@@ -947,7 +947,7 @@ def draw_monkeys():
     #snipermonkey
 
     for i in sniper_monkeys:
-        screen.blit(sniper_monkey_model,(i[1][0]-25,i[1][1]-25))
+        screen.blit(sniper_monkey_model,(i[1][0]-25,i[1][1]-75))
       
     for i in range(len(snipeds)):
         pygame.draw.circle(screen, (255,0,0), (int(snipeds[i][0]), int(snipeds[i][1])),5)    
