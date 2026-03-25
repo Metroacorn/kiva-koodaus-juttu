@@ -1074,10 +1074,10 @@ tackcooldown=60
 spikecooldown=180
 
 dartdamage=1
-boomdamage=1
-snipedamage=100
-tackdamage=1
-spikedamage=1
+boomdamage=3
+snipedamage=200
+tackdamage=2
+spikedamage=5
 
 dartspeed=5
 boomerangspeed=5
@@ -1397,7 +1397,7 @@ while running:
 
         for i in spikes[:]:
             if hit.collidepoint(i[0], i[1]):
-                n[2] -= 1
+                n[2] -= spikedamage
                 spikes.remove(i)
                 break
 
