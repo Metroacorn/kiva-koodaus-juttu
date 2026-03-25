@@ -823,7 +823,7 @@ def spawnbanana(i):
     banana=[7,(x,y),(255,0,0)]
     
     bananas.append(banana)
-
+spikes=[]
 def dart_monkeyshoot(i,balloonpos):
     
 
@@ -896,7 +896,7 @@ def spikefactoryplaced():
      
      spike_factoryshootbox.append(spikeshoot)
      
-     d=[25,(spikestayx,spikestayy),(0,0,0)]
+     d=[25,(spikestayx,spikestayy),(0,0,0),0]
      
      spike_factorycooldowns.append(spikecooldown)
      
@@ -1065,7 +1065,7 @@ tackcost=100
 snipercost=500
 bananacost=1000
 spikecost=300
-
+s=0
 bananacooldown=600
 dartcooldown=30
 boomcooldown=120
@@ -1362,7 +1362,7 @@ while running:
                     spike_factorybought=False
                     spikestayx, spikestayy=pygame.mouse.get_pos()
                     spikeplaced=True
-for factory in spike_factories:
+    for factory in spike_factories:
         ct = pygame.time.get_ticks()
         if ct - factory[3] > 2000:
             factory[3] = ct
