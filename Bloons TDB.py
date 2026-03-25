@@ -1154,6 +1154,8 @@ while running:
         active_enemies=[]
         if p_hp==p_hporiginal:
             c_v=1
+        else:
+            c_v=0
         p_hp=p_hporiginal
         h_v=5
         wave_points=100
@@ -1162,7 +1164,7 @@ while running:
         reset=False
         
     
-    if p_hp<0:
+    if p_hp<=0:
         menuon=True
         
     if menuon:
